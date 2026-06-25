@@ -1,0 +1,1 @@
+﻿-- Esquema MySQL con tablas de parcelas, sensores, lecturas, turnos de riego y eventos de monitor.

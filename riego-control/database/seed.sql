@@ -1,0 +1,1 @@
+﻿-- Datos iniciales de parcelas de La Yarada, sensores simulados, umbrales de humedad y turnos de ejemplo.
