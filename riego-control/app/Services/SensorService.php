@@ -1,1 +1,1 @@
-﻿<?php // Servicio que procesara lecturas de sensores y aplicara LectoresEscritores para proteger actualizaciones concurrentes.
+<?php // Punto de extension futuro para sensores fisicos/APIs. No se usa en la version JSON simulada.

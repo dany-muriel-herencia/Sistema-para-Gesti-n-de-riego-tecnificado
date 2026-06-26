@@ -1,1 +1,1 @@
-﻿<?php // Servicio que invocara StressAnalyzer para calcular parcelas con estres hidrico y preparar prioridades de riego.
+<?php // Punto de extension futuro para analisis externo. No se usa en la version JSON simulada.

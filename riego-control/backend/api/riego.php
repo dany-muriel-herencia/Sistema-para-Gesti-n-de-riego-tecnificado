@@ -1,1 +1,5 @@
-﻿<?php // Endpoint API para crear turnos, consultar estado de riego y accionar el Monitor mediante RiegoController.
+<?php
+
+require_once __DIR__ . '/../../app/Controllers/RiegoController.php';
+
+(new RiegoController())->respuestaJson();

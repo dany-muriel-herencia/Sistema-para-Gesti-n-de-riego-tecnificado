@@ -1,1 +1,1 @@
-﻿<?php // Servicio de negocio que orquestara asignacion de turnos, Monitor y control de concurrencia del hidrante principal.
+<?php // Punto de extension futuro para orquestacion de riego. No se usa en la version JSON simulada.

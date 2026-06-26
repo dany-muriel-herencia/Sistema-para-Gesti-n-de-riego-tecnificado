@@ -1,1 +1,5 @@
-﻿<?php // Endpoint API para recibir y publicar lecturas de sensores de humedad mediante SensorController.
+<?php
+
+require_once __DIR__ . '/../../app/Controllers/SensorController.php';
+
+(new SensorController())->respuestaJson();

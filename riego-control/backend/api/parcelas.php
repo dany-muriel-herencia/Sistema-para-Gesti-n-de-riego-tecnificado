@@ -1,1 +1,5 @@
-﻿<?php // Endpoint API para listar, consultar y actualizar parcelas mediante ParcelaController.
+<?php
+
+require_once __DIR__ . '/../../app/Controllers/ParcelaController.php';
+
+(new ParcelaController())->respuestaJson();
