@@ -1,64 +1,68 @@
 <?php
 
 require_once __DIR__ . '/../Models/Parcela.php';
-require_once __DIR__ . '/../../backend/analyzer/StressAnalyzer.php';
-require_once __DIR__ . '/../../backend/algorithms/LectoresEscritores.php';
 
 class ParcelaController
 {
-    public static function cargarDatosSimulados(): array
-    {
-        $ruta = __DIR__ . '/../../database/sensores_simulados.json';
-        $contenido = file_get_contents($ruta);
-
-        if ($contenido === false) {
-            throw new RuntimeException('No se pudo leer el archivo JSON simulado.');
-        }
-
-        $datos = json_decode($contenido, true);
-
-        if (!is_array($datos)) {
-            throw new RuntimeException('El archivo JSON simulado no tiene un formato valido.');
-        }
-
-        return $datos;
-    }
-
     public function listar(): array
     {
-        $sincronizador = new LectoresEscritores();
-        $analyzer = new StressAnalyzer();
-
-        return $sincronizador->leer('sensores_simulados.json', function () use ($analyzer): array {
-            $datos = self::cargarDatosSimulados();
-
-            return array_map(function (array $data) use ($analyzer): array {
-                $parcela = $analyzer->evaluar(Parcela::fromArray($data));
-                return $parcela->toArray();
-            }, $datos['parcelas'] ?? []);
-        });
+        return array_map(function (Parcela $parcela) {
+            return $parcela->toArray();
+        }, Parcela::all());
     }
 
-    public function clima(): array
+    public function obtener(int $id): ?array
     {
-        $datos = self::cargarDatosSimulados();
-        return $datos['clima'] ?? [];
+        $parcela = Parcela::find($id);
+        return $parcela ? $parcela->toArray() : null;
     }
 
-    public function hidrantes(): array
+    public function crear(array $data): array
     {
-        $datos = self::cargarDatosSimulados();
-        return $datos['hidrantes'] ?? [];
+        $parcela = Parcela::fromArray($data);
+        if (!$parcela->save()) {
+            return ['error' => 'No se pudo crear la parcela.'];
+        }
+
+        return $parcela->toArray();
+    }
+
+    public function actualizar(int $id, array $data): array
+    {
+        $parcela = Parcela::find($id);
+        if (!$parcela) {
+            return ['error' => 'Parcela no encontrada.'];
+        }
+
+        $parcela->setNombre($data['nombre'] ?? $parcela->getNombre());
+        $parcela->setArea(isset($data['area']) ? (float) $data['area'] : $parcela->getArea());
+        $parcela->setCultivo($data['cultivo'] ?? $parcela->getCultivo());
+        $parcela->setEstado($data['estado'] ?? $parcela->getEstado());
+
+        if (!$parcela->save()) {
+            return ['error' => 'No se pudo actualizar la parcela.'];
+        }
+
+        return $parcela->toArray();
+    }
+
+    public function eliminar(int $id): array
+    {
+        $parcela = Parcela::find($id);
+        if (!$parcela) {
+            return ['error' => 'Parcela no encontrada.'];
+        }
+
+        if (!$parcela->delete()) {
+            return ['error' => 'No se pudo eliminar la parcela.'];
+        }
+
+        return ['success' => true];
     }
 
     public function respuestaJson(): void
     {
         header('Content-Type: application/json');
-        echo json_encode([
-            'fuente' => 'database/sensores_simulados.json',
-            'parcelas' => $this->listar(),
-            'clima' => $this->clima(),
-            'hidrantes' => $this->hidrantes(),
-        ], JSON_PRETTY_PRINT);
+        echo json_encode($this->listar(), JSON_PRETTY_PRINT);
     }
 }

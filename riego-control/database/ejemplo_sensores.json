@@ -1,0 +1,41 @@
+{
+  "sensores": [
+    {
+      "id": 1,
+      "parcela": "Olivos Sector A",
+      "parcela_id": 1,
+      "temperatura": 29.6,
+      "humedad": 18.0,
+      "fecha": "2026-06-25T08:00:00"
+    },
+    {
+      "id": 2,
+      "parcela": "Vid Sector B",
+      "parcela_id": 2,
+      "temperatura": 26.8,
+      "humedad": 34.0,
+      "fecha": "2026-06-25T08:10:00"
+    },
+    {
+      "id": 3,
+      "parcela": "Aji Sector C",
+      "parcela_id": 3,
+      "temperatura": 31.1,
+      "humedad": 22.0,
+      "fecha": "2026-06-25T08:20:00"
+    },
+    {
+      "id": 4,
+      "parcela": "Maiz Sector D",
+      "parcela_id": 4,
+      "temperatura": 28.3,
+      "humedad": 27.0,
+      "fecha": "2026-06-25T08:30:00"
+    }
+  ],
+  "clima": {
+    "temperatura_ambiente": 27.4,
+    "humedad_relativa": 48,
+    "condicion": "Soleado con viento costero"
+  }
+}
