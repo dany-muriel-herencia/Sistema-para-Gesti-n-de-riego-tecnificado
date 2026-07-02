@@ -5,18 +5,31 @@ class ProductorConsumidor
     private array $cola = [];
     private array $eventos = [];
 
-    public function producir(Parcela $parcela): void
+    /**
+     * Produce (encola) una parcela si su estrés hídrico es alto o medio.
+     * 
+     * @param array $parcela Array con ['id' => ..., 'nombre' => ..., 'estres_hidrico' => 'alto'|'medio'|'bajo']
+     *                       (no es un objeto Parcela; el estrés se calcula externamente)
+     */
+    public function producir(array $parcela): void
     {
-        if (!in_array($parcela->estresHidrico, ['alto', 'medio'], true)) {
-            $this->eventos[] = "Productor descarta {$parcela->id}: estres {$parcela->estresHidrico}";
+        $estres = $parcela['estres_hidrico'] ?? 'bajo';
+
+        if (!in_array($estres, ['alto', 'medio'], true)) {
+            $this->eventos[] = "Productor descarta {$parcela['id']}: estres {$estres}";
             return;
         }
 
         $this->cola[] = $parcela;
-        $this->eventos[] = "Productor encola {$parcela->id}: estres {$parcela->estresHidrico}";
+        $this->eventos[] = "Productor encola {$parcela['id']}: estres {$estres}";
     }
 
-    public function consumir(): ?Parcela
+    /**
+     * Consume (desencola) la próxima parcela en la cola.
+     * 
+     * @return array|null Array con estructura de parcela, o null si cola vacía
+     */
+    public function consumir(): ?array
     {
         $parcela = array_shift($this->cola);
 
@@ -25,7 +38,7 @@ class ProductorConsumidor
             return null;
         }
 
-        $this->eventos[] = "Consumidor toma {$parcela->id} para asignar turno";
+        $this->eventos[] = "Consumidor toma {$parcela['id']} para asignar turno";
         return $parcela;
     }
 
