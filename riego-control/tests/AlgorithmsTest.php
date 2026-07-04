@@ -2,6 +2,10 @@
 
 require_once __DIR__ . '/../backend/algorithms/ProductorConsumidor.php';
 require_once __DIR__ . '/../backend/algorithms/LectoresEscritores.php';
+require_once __DIR__ . '/../backend/monitor/Semaforo.php';
+require_once __DIR__ . '/../backend/monitor/Hidrant.php';
+require_once __DIR__ . '/../backend/algorithms/Monitor.php';
+require_once __DIR__ . '/../backend/analyzer/StressAnalyzer.php';
 
 class AlgorithmsTest
 {
@@ -23,6 +27,7 @@ class AlgorithmsTest
         $this->testLectoresEscritoresLectoresMultiples();
         $this->testLectoresEscritoresEscrituresSimple();
         $this->testLectoresEscritoresEscritorEsperaLectores();
+        $this->testProductorConsumidorYMonitorConJsonSimulado();
 
         echo "\n=== RESULTADO FINAL ===\n";
         echo "Pasadas: {$this->passedTests}/{$this->totalTests}\n";
@@ -208,12 +213,11 @@ class AlgorithmsTest
         echo "TEST: LectoresEscritores - escritor espera si hay lectores\n";
         $rw = new LectoresEscritores();
 
-        // Simular: lector entra
-        $rw->leer('temp', fn () => null);
-        
-        // Ahora hay lectores activos, intentar escribir
-        // (En implementación actual, escribir() no tiene mutex real, solo simula)
-        $rw->escribir('temp', fn () => null);
+        // Simular escritura mientras el lector aún está activo
+        $rw->leer('temp', function () use ($rw) {
+            $rw->escribir('temp', fn () => null);
+            return null;
+        });
 
         $eventos = $rw->eventos();
         
@@ -227,6 +231,62 @@ class AlgorithmsTest
         }
         
         $this->assert($hasWaitEvent, "Se registra que Escritor espera si hay lectores");
+    }
+
+    private function testProductorConsumidorYMonitorConJsonSimulado(): void
+    {
+        echo "TEST: ProductorConsumidor + Monitor con JSON simulado\n";
+
+        $jsonFile = __DIR__ . '/../database/sensores_simulados.json';
+        $contents = file_get_contents($jsonFile);
+        $data = json_decode($contents, true);
+
+        $this->assert(is_array($data), "Carga JSON simulado");
+        $this->assert(array_key_exists('parcelas', $data), "JSON tiene parcelas");
+        $this->assert(array_key_exists('hidrantes', $data), "JSON tiene hidrantes");
+
+        $analyzer = new StressAnalyzer();
+        $productor = new ProductorConsumidor();
+        $monitor = new Monitor();
+
+        $hidrantes = array_map(fn(array $item) => new Hidrant(
+            $item['id'] ?? null,
+            $item['nombre'] ?? '',
+            isset($item['disponible']) ? (bool) $item['disponible'] : false,
+            isset($item['capacidad_simultanea']) ? (int) $item['capacidad_simultanea'] : 1
+        ), $data['hidrantes']);
+
+        foreach ($data['parcelas'] as $item) {
+            $parcela = [
+                'id' => $item['id'] ?? null,
+                'nombre' => $item['nombre'] ?? '',
+                'cultivo' => $item['cultivo'] ?? '',
+                'temperatura' => isset($item['temperatura']) ? (float) $item['temperatura'] : 0.0,
+                'humedad' => isset($item['humedad']) ? (float) $item['humedad'] : 0.0,
+                'estres_hidrico' => $analyzer->evaluarValores(
+                    isset($item['temperatura']) ? (float) $item['temperatura'] : 0.0,
+                    isset($item['humedad']) ? (float) $item['humedad'] : 0.0
+                ),
+            ];
+
+            $productor->producir($parcela);
+        }
+
+        $asignados = 0;
+
+        while (($parcela = $productor->consumir()) !== null) {
+            foreach ($hidrantes as $hidrant) {
+                $resultado = $monitor->solicitarRiego($parcela, $hidrant);
+                if ($resultado !== 'bloqueado') {
+                    $asignados++;
+                    break;
+                }
+            }
+        }
+
+        $this->assert($asignados > 0, "Se asignan al menos algunas parcelas a hidrantes");
+        $this->assert(count($productor->eventos()) > 0, "Productor genera eventos de encolado o descarte");
+        $this->assert(count($monitor->eventos()) > 0, "Monitor genera eventos de asignación\espera\bloqueo");
     }
 }
 

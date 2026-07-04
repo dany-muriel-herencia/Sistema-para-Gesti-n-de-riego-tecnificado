@@ -6,7 +6,7 @@ require_once __DIR__ . '/app/Controllers/RiegoController.php';
 $parcelaController = new ParcelaController();
 $riegoController = new RiegoController();
 
-$parcelas = $parcelaController->listar();
+$parcelas = $parcelaController->listarSimulada();
 $clima = $parcelaController->clima();
 $plan = $riegoController->planificar();
 $turnos = $plan['turnos'];

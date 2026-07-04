@@ -1,6 +1,7 @@
 <?php
 
 require_once __DIR__ . '/../Models/Parcela.php';
+require_once __DIR__ . '/../../backend/analyzer/StressAnalyzer.php';
 
 class ParcelaController
 {
@@ -58,6 +59,50 @@ class ParcelaController
         }
 
         return ['success' => true];
+    }
+
+    private function loadSimulatedData(): array
+    {
+        $file = __DIR__ . '/../../database/sensores_simulados.json';
+        if (!is_file($file)) {
+            return ['clima' => [], 'parcelas' => [], 'hidrantes' => []];
+        }
+
+        $contents = file_get_contents($file);
+        $data = json_decode($contents, true);
+
+        if (!is_array($data)) {
+            return ['clima' => [], 'parcelas' => [], 'hidrantes' => []];
+        }
+
+        return $data;
+    }
+
+    public function clima(): array
+    {
+        $data = $this->loadSimulatedData();
+        return $data['clima'] ?? [];
+    }
+
+    public function listarSimulada(): array
+    {
+        $data = $this->loadSimulatedData();
+        $analyzer = new StressAnalyzer();
+        $parcelas = $data['parcelas'] ?? [];
+
+        return array_map(function (array $parcela) use ($analyzer) {
+            $temperatura = isset($parcela['temperatura']) ? (float) $parcela['temperatura'] : 0.0;
+            $humedad = isset($parcela['humedad']) ? (float) $parcela['humedad'] : 0.0;
+
+            return [
+                'id' => $parcela['id'] ?? null,
+                'nombre' => $parcela['nombre'] ?? '',
+                'cultivo' => $parcela['cultivo'] ?? '',
+                'humedad' => $humedad,
+                'temperatura' => $temperatura,
+                'estres_hidrico' => $analyzer->evaluarValores($temperatura, $humedad),
+            ];
+        }, $parcelas);
     }
 
     public function respuestaJson(): void

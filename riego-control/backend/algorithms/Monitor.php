@@ -1,5 +1,7 @@
 <?php
 
+require_once __DIR__ . '/../monitor/Semaforo.php';
+
 class Monitor
 {
     private array $eventos = [];
