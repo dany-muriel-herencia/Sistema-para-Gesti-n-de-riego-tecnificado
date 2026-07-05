@@ -1,12 +1,8 @@
 <?php
 
 require_once __DIR__ . '/../Models/TurnoRiego.php';
-require_once __DIR__ . '/../Models/Parcela.php';
-require_once __DIR__ . '/../Models/Sensor.php';
 require_once __DIR__ . '/../../backend/analyzer/StressAnalyzer.php';
-require_once __DIR__ . '/../../backend/algorithms/ProductorConsumidor.php';
-require_once __DIR__ . '/../../backend/monitor/Hidrant.php';
-require_once __DIR__ . '/../../backend/algorithms/Monitor.php';
+require_once __DIR__ . '/../Services/RiegoService.php';
 
 class RiegoController
 {
@@ -117,7 +113,11 @@ class RiegoController
     public function planificar(): array
     {
         $data = $this->loadSimulatedData();
-        return $this->planificarDesdeDatos($data);
+        $parcelas = $this->prepareParcelas($data['parcelas'] ?? []);
+        $hidrantes = $data['hidrantes'] ?? [];
+
+        $service = new RiegoService();
+        return $service->planificar($parcelas, $hidrantes);
     }
 
     public function planificarDesdeJsonPorBloques(string $jsonPath, int $tamanoBloque = 1): array
@@ -133,80 +133,12 @@ class RiegoController
             return ['turnos' => [], 'hidrantes' => [], 'eventos' => [], 'bloques' => 0];
         }
 
-        return $this->planificarDesdeDatos($data, $tamanoBloque);
-    }
-
-    private function planificarDesdeDatos(array $data, int $tamanoBloque = 1): array
-    {
         $parcelas = $this->prepareParcelas($data['parcelas'] ?? []);
-        $hidrantesRaw = $data['hidrantes'] ?? [];
+        $hidrantes = $data['hidrantes'] ?? [];
 
-        $productor = new ProductorConsumidor();
-        $monitor = new Monitor();
-        $hidrantes = [];
-        $hidrantesObjects = [];
-
-        foreach ($hidrantesRaw as $item) {
-            $hidrantes[] = [
-                'id' => $item['id'] ?? null,
-                'nombre' => $item['nombre'] ?? '',
-                'disponible' => isset($item['disponible']) ? (bool) $item['disponible'] : false,
-                'capacidad_simultanea' => isset($item['capacidad_simultanea']) ? (int) $item['capacidad_simultanea'] : 1,
-            ];
-
-            $hidrantesObjects[] = new Hidrant(
-                $item['id'] ?? null,
-                $item['nombre'] ?? '',
-                isset($item['disponible']) ? (bool) $item['disponible'] : false,
-                isset($item['capacidad_simultanea']) ? (int) $item['capacidad_simultanea'] : 1
-            );
-        }
-
-        foreach ($parcelas as $parcela) {
-            $productor->producir($parcela);
-        }
-
-        $turnos = [];
-        $bloques = 0;
-        $parcelasProcesadas = 0;
-
-        while (($parcela = $productor->consumir()) !== null) {
-            $parcelasProcesadas++;
-            if ($parcelasProcesadas % max(1, $tamanoBloque) === 0) {
-                $bloques++;
-            }
-
-            $turno = [
-                'id' => $parcela['id'],
-                'parcela_id' => $parcela['id'],
-                'hidrante_id' => null,
-                'duracion_minutos' => 30,
-                'estado' => 'pendiente',
-            ];
-
-            $asignado = false;
-            foreach ($hidrantesObjects as $hidrant) {
-                $resultado = $monitor->solicitarRiego($parcela, $hidrant);
-                if ($resultado !== 'bloqueado') {
-                    $turno['hidrante_id'] = $hidrant->id;
-                    $turno['estado'] = $resultado;
-                    $asignado = true;
-                    break;
-                }
-            }
-
-            if (!$asignado) {
-                $turno['estado'] = 'sin_hidrante';
-            }
-
-            $turnos[] = $turno;
-        }
-
-        return [
-            'turnos' => $turnos,
-            'hidrantes' => $hidrantes,
-            'eventos' => array_merge($productor->eventos(), $monitor->eventos()),
-            'bloques' => $bloques,
-        ];
+        $service = new RiegoService();
+        $resultado = $service->planificar($parcelas, $hidrantes);
+        $resultado['bloques'] = $tamanoBloque > 0 ? max(1, (int) ceil(count($parcelas) / $tamanoBloque)) : 0;
+        return $resultado;
     }
 }
