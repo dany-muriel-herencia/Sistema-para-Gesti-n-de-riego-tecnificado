@@ -1,0 +1,106 @@
+/* ============================================
+   CONSOLA - ESTILOS ESPECÍFICOS
+   ============================================ */
+
+.console-output {
+    max-height: 200px;
+    overflow-y: auto;
+    background: var(--bg-primary);
+    padding: 12px 20px;
+    font-family: var(--font-mono);
+    font-size: 13px;
+    line-height: 1.8;
+}
+
+.console-output .log {
+    display: flex;
+    gap: 12px;
+    padding: 4px 12px;
+    border-left: 3px solid transparent;
+    border-radius: 4px;
+    animation: slideIn 0.3s ease;
+    transition: var(--transition);
+}
+
+.console-output .log:hover {
+    background: rgba(255,255,255,0.03);
+}
+
+.console-output .log .time {
+    color: var(--text-light);
+    font-size: 11px;
+    min-width: 70px;
+    opacity: 0.7;
+    font-weight: 500;
+}
+
+.console-output .log .icon { font-size: 15px; }
+.console-output .log .msg { flex: 1; }
+
+.console-output .log.critico {
+    border-left-color: var(--danger);
+    background: var(--danger-bg);
+}
+
+.console-output .log.critico .msg {
+    color: var(--danger);
+    font-weight: 600;
+}
+
+@keyframes slideIn {
+    from { opacity: 0; transform: translateX(-12px); }
+    to { opacity: 1; transform: translateX(0); }
+}
+
+.console-controls {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+}
+
+.console-controls .counter {
+    font-size: 12px;
+    color: var(--text-secondary);
+    font-weight: 500;
+}
+
+.console-controls .btn-sm {
+    padding: 4px 14px;
+    font-size: 11px;
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-sm);
+    background: transparent;
+    cursor: pointer;
+    transition: var(--transition);
+    font-family: var(--font-family);
+    color: var(--text-secondary);
+    font-weight: 600;
+}
+
+.console-controls .btn-sm:hover {
+    background: var(--bg-hover);
+    border-color: var(--primary);
+    color: var(--primary);
+}
+
+.console-controls .btn-sm select {
+    background: var(--bg-primary);
+    color: var(--text-secondary);
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-sm);
+    padding: 4px 8px;
+    font-family: var(--font-family);
+    font-size: 11px;
+    font-weight: 600;
+    cursor: pointer;
+}
+
+@media (max-width: 480px) {
+    .console-output {
+        font-size: 12px;
+        padding: 8px 12px;
+    }
+    .console-output .log .time {
+        min-width: 55px;
+    }
+}

@@ -1,0 +1,31 @@
+/* ============================================
+   TURNOS - ESTILOS ESPECÍFICOS
+   ============================================ */
+
+.turnos-list {
+    display: grid;
+    gap: 10px;
+}
+
+.list-item .status.completed {
+    color: var(--success);
+    background: var(--success-bg);
+}
+.list-item .status.pending {
+    color: var(--warning);
+    background: var(--warning-bg);
+}
+.list-item .status.waiting {
+    color: #d29922;
+    background: rgba(210, 153, 34, 0.15);
+}
+
+.list-item.completed {
+    border-left-color: var(--success);
+}
+.list-item.pending {
+    border-left-color: var(--warning);
+}
+.list-item.waiting {
+    border-left-color: #d29922;
+}

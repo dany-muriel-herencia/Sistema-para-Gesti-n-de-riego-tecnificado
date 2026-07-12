@@ -1,0 +1,88 @@
+<!-- ========================================== -->
+<!-- DASHBOARD - PÁGINA COMPLETA -->
+<!-- ========================================== -->
+
+<!-- Controles rápidos -->
+<div class="controls-bar">
+    <span class="label">🎮 Control:</span>
+    <button class="btn btn-primary" onclick="generarEvento()">📌 Evento</button>
+    <button class="btn btn-warning" onclick="cambiarHumedad()">💧 Humedad</button>
+    <button class="btn btn-info" onclick="toggleHidrante()">🚿 Hidrante</button>
+    <button class="btn btn-success" onclick="agregarParcela()">🌱 Parcela</button>
+    <button class="btn btn-danger" onclick="resetearDatos()">🔄 Reset</button>
+    <button class="btn btn-outline" onclick="recargarDatos()">🔄 Recargar BD</button>
+    <span class="timer">⏱️ <span class="time" id="timerDisplay">00:00</span></span>
+</div>
+
+<!-- Métricas -->
+<div class="metrics-grid">
+    <div class="metric-card">
+        <div class="header">
+            <span class="label">Parcelas</span>
+            <span class="material-symbols-outlined icon" style="color:var(--primary);">potted_plant</span>
+        </div>
+        <div class="value primary" id="totalParcelas">0</div>
+        <div class="sub">Monitoreadas</div>
+    </div>
+    <div class="metric-card">
+        <div class="header">
+            <span class="label">Alerta</span>
+            <span class="material-symbols-outlined icon" style="color:var(--warning);">warning</span>
+        </div>
+        <div class="value warning" id="alertasCount">0</div>
+        <div class="sub">Requieren atención</div>
+    </div>
+    <div class="metric-card">
+        <div class="header">
+            <span class="label">Crítico</span>
+            <span class="material-symbols-outlined icon" style="color:var(--danger);">error</span>
+        </div>
+        <div class="value error" id="criticosCount">0</div>
+        <div class="sub">¡Acción urgente!</div>
+    </div>
+    <div class="metric-card">
+        <div class="header">
+            <span class="label">Hidrantes</span>
+            <span class="material-symbols-outlined icon" style="color:var(--primary);">valve</span>
+        </div>
+        <div class="value" id="hidrantesCount">0 <span class="small">/0</span></div>
+        <div class="sub">Disponibles</div>
+    </div>
+    <div class="metric-card">
+        <div class="header">
+            <span class="label">Humedad</span>
+            <span class="material-symbols-outlined icon" style="color:var(--info);">humidity_mid</span>
+        </div>
+        <div class="value info" id="humedadMedia">0%</div>
+        <div class="sub">Promedio</div>
+    </div>
+    <div class="metric-card">
+        <div class="header">
+            <span class="label">Temperatura</span>
+            <span class="material-symbols-outlined icon" style="color:var(--danger);">device_thermostat</span>
+        </div>
+        <div class="value" id="tempPromedio">0 <span class="small">°C</span></div>
+        <div class="sub">Promedio</div>
+    </div>
+</div>
+
+<!-- Mapa de calor -->
+<div class="panel">
+    <div class="panel-header">
+        <div class="title">
+            <span class="material-symbols-outlined">grid_view</span>
+            <h2>🗺️ Mapa de Estrés Hídrico</h2>
+            <div class="badge-group">
+                <span class="badge"><span class="dot dot-green"></span> Óptimo</span>
+                <span class="badge"><span class="dot dot-yellow"></span> Alerta</span>
+                <span class="badge"><span class="dot dot-red"></span> Crítico</span>
+            </div>
+        </div>
+        <span class="info-text" id="updateTime">Actualizado: ahora</span>
+    </div>
+    <div class="panel-body">
+        <div class="heatmap-grid" id="heatmapContainer">
+            <!-- Renderizado por JS -->
+        </div>
+    </div>
+</div>

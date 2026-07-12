@@ -1,0 +1,414 @@
+/* ============================================
+   HIDRANTES - DISEÑO FUTURISTA
+   ============================================ */
+
+/* ===== CONTENEDOR PRINCIPAL ===== */
+.hidrantes-futuristic {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 24px;
+    padding: 8px;
+}
+
+/* ===== TARJETA DE HIDRANTE ===== */
+.hidrante-card {
+    position: relative;
+    background: linear-gradient(145deg, rgba(16, 24, 40, 0.9), rgba(8, 12, 24, 0.95));
+    border: 1px solid rgba(88, 166, 255, 0.15);
+    border-radius: 16px;
+    padding: 24px 20px;
+    overflow: hidden;
+    transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+    cursor: pointer;
+    backdrop-filter: blur(10px);
+    box-shadow: 0 4px 30px rgba(0, 0, 0, 0.3);
+}
+
+/* ===== BORDE DE NEÓN ===== */
+.hidrante-card::before {
+    content: '';
+    position: absolute;
+    inset: -1px;
+    border-radius: 16px;
+    padding: 1px;
+    background: linear-gradient(135deg, 
+        rgba(88, 166, 255, 0.3),
+        rgba(88, 166, 255, 0.05),
+        rgba(88, 166, 255, 0.3)
+    );
+    -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+    mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+    -webkit-mask-composite: xor;
+    mask-composite: exclude;
+    opacity: 0.5;
+    transition: opacity 0.5s ease;
+}
+
+.hidrante-card:hover::before {
+    opacity: 1;
+}
+
+/* ===== EFECTO DE NEÓN AL HOVER ===== */
+.hidrante-card::after {
+    content: '';
+    position: absolute;
+    top: -50%;
+    left: -50%;
+    width: 200%;
+    height: 200%;
+    background: radial-gradient(
+        circle at center,
+        rgba(88, 166, 255, 0.05) 0%,
+        transparent 70%
+    );
+    opacity: 0;
+    transition: opacity 0.6s ease;
+    pointer-events: none;
+}
+
+.hidrante-card:hover::after {
+    opacity: 1;
+}
+
+.hidrante-card:hover {
+    transform: translateY(-8px) scale(1.01);
+    box-shadow: 
+        0 0 40px rgba(88, 166, 255, 0.15),
+        0 0 80px rgba(88, 166, 255, 0.05),
+        inset 0 0 30px rgba(88, 166, 255, 0.03);
+    border-color: rgba(88, 166, 255, 0.3);
+}
+
+/* ===== ESTADO ACTIVO ===== */
+.hidrante-card.activo {
+    border-color: rgba(63, 185, 80, 0.4);
+    box-shadow: 
+        0 0 30px rgba(63, 185, 80, 0.1),
+        inset 0 0 30px rgba(63, 185, 80, 0.03);
+}
+
+.hidrante-card.activo::before {
+    background: linear-gradient(135deg, 
+        rgba(63, 185, 80, 0.4),
+        rgba(63, 185, 80, 0.05),
+        rgba(63, 185, 80, 0.4)
+    );
+}
+
+/* ===== ESTADO INACTIVO ===== */
+.hidrante-card.inactivo {
+    border-color: rgba(248, 81, 73, 0.3);
+    box-shadow: 
+        0 0 30px rgba(248, 81, 73, 0.05),
+        inset 0 0 30px rgba(248, 81, 73, 0.02);
+}
+
+.hidrante-card.inactivo::before {
+    background: linear-gradient(135deg, 
+        rgba(248, 81, 73, 0.3),
+        rgba(248, 81, 73, 0.05),
+        rgba(248, 81, 73, 0.3)
+    );
+}
+
+/* ===== HEADER DE LA TARJETA ===== */
+.hidrante-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 16px;
+    position: relative;
+    z-index: 1;
+}
+
+.hidrante-id {
+    font-family: 'Courier New', monospace;
+    font-size: 12px;
+    font-weight: 700;
+    color: rgba(88, 166, 255, 0.6);
+    background: rgba(88, 166, 255, 0.08);
+    padding: 4px 14px;
+    border-radius: 20px;
+    border: 1px solid rgba(88, 166, 255, 0.1);
+    letter-spacing: 1px;
+}
+
+.hidrante-status-indicator {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 11px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+/* ===== INDICADOR DE ESTADO (NEÓN) ===== */
+.hidrante-status-dot {
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    position: relative;
+    transition: all 0.3s ease;
+}
+
+.hidrante-status-dot.activo {
+    background: #3fb950;
+    box-shadow: 
+        0 0 10px rgba(63, 185, 80, 0.5),
+        0 0 20px rgba(63, 185, 80, 0.2),
+        inset 0 0 8px rgba(63, 185, 80, 0.3);
+    animation: pulse-dot-neon 2s ease-in-out infinite;
+}
+
+.hidrante-status-dot.inactivo {
+    background: #f85149;
+    box-shadow: 
+        0 0 10px rgba(248, 81, 73, 0.3),
+        0 0 20px rgba(248, 81, 73, 0.1),
+        inset 0 0 8px rgba(248, 81, 73, 0.2);
+    animation: pulse-dot-off 2s ease-in-out infinite;
+}
+
+@keyframes pulse-dot-neon {
+    0%, 100% { 
+        box-shadow: 0 0 10px rgba(63, 185, 80, 0.5), 0 0 20px rgba(63, 185, 80, 0.2);
+    }
+    50% { 
+        box-shadow: 0 0 20px rgba(63, 185, 80, 0.8), 0 0 40px rgba(63, 185, 80, 0.3), 0 0 60px rgba(63, 185, 80, 0.1);
+    }
+}
+
+@keyframes pulse-dot-off {
+    0%, 100% { 
+        box-shadow: 0 0 10px rgba(248, 81, 73, 0.3), 0 0 20px rgba(248, 81, 73, 0.1);
+    }
+    50% { 
+        box-shadow: 0 0 15px rgba(248, 81, 73, 0.5), 0 0 30px rgba(248, 81, 73, 0.2);
+    }
+}
+
+/* ===== NOMBRE DEL HIDRANTE ===== */
+.hidrante-nombre {
+    font-size: 20px;
+    font-weight: 700;
+    color: #e6edf3;
+    margin-bottom: 4px;
+    position: relative;
+    z-index: 1;
+    letter-spacing: -0.5px;
+}
+
+.hidrante-nombre span {
+    background: linear-gradient(135deg, #58a6ff, #79c0ff);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+/* ===== MÉTRICAS DEL HIDRANTE ===== */
+.hidrante-metrics {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+    margin: 16px 0;
+    position: relative;
+    z-index: 1;
+}
+
+.hidrante-metric {
+    background: rgba(255, 255, 255, 0.03);
+    border-radius: 10px;
+    padding: 12px 14px;
+    border: 1px solid rgba(255, 255, 255, 0.05);
+    transition: all 0.3s ease;
+}
+
+.hidrante-metric:hover {
+    background: rgba(255, 255, 255, 0.06);
+    border-color: rgba(88, 166, 255, 0.1);
+}
+
+.hidrante-metric .label {
+    font-size: 10px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    color: rgba(139, 148, 158, 0.7);
+    font-weight: 600;
+}
+
+.hidrante-metric .value {
+    font-size: 20px;
+    font-weight: 700;
+    color: #e6edf3;
+    margin-top: 2px;
+    font-family: 'Courier New', monospace;
+}
+
+.hidrante-metric .value.activo { color: #3fb950; }
+.hidrante-metric .value.inactivo { color: #f85149; }
+
+/* ===== BARRA DE ESTADO (ESTILO CYBER) ===== */
+.hidrante-status-bar {
+    position: relative;
+    z-index: 1;
+    margin-top: 4px;
+}
+
+.hidrante-status-bar .bar-track {
+    width: 100%;
+    height: 4px;
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: 4px;
+    overflow: hidden;
+    position: relative;
+}
+
+.hidrante-status-bar .bar-track .bar-fill {
+    height: 100%;
+    border-radius: 4px;
+    transition: width 1.5s cubic-bezier(0.4, 0, 0.2, 1);
+    position: relative;
+}
+
+.hidrante-status-bar .bar-track .bar-fill.activo {
+    background: linear-gradient(90deg, #3fb950, #2ea043);
+    box-shadow: 0 0 10px rgba(63, 185, 80, 0.3);
+}
+
+.hidrante-status-bar .bar-track .bar-fill.inactivo {
+    background: linear-gradient(90deg, #f85149, #da3633);
+    box-shadow: 0 0 10px rgba(248, 81, 73, 0.3);
+}
+
+/* ===== EFECTO DE SCAN LINE ===== */
+.hidrante-card .scan-line {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 2px;
+    background: linear-gradient(90deg, 
+        transparent,
+        rgba(88, 166, 255, 0.1),
+        rgba(88, 166, 255, 0.3),
+        rgba(88, 166, 255, 0.1),
+        transparent
+    );
+    animation: scan-line 3s linear infinite;
+    pointer-events: none;
+    z-index: 0;
+}
+
+@keyframes scan-line {
+    0% { transform: translateY(-100%); opacity: 0; }
+    10% { opacity: 1; }
+    90% { opacity: 1; }
+    100% { transform: translateY(400%); opacity: 0; }
+}
+
+/* ===== GRID DE FONDO (ESTILO CYBER) ===== */
+.hidrante-card .cyber-grid {
+    position: absolute;
+    inset: 0;
+    background-image: 
+        linear-gradient(rgba(88, 166, 255, 0.02) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(88, 166, 255, 0.02) 1px, transparent 1px);
+    background-size: 20px 20px;
+    pointer-events: none;
+    opacity: 0.3;
+    z-index: 0;
+}
+
+/* ===== FOOTER ===== */
+.hidrante-footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 16px;
+    padding-top: 16px;
+    border-top: 1px solid rgba(255, 255, 255, 0.05);
+    position: relative;
+    z-index: 1;
+}
+
+.hidrante-footer .info {
+    font-size: 11px;
+    color: rgba(139, 148, 158, 0.6);
+    font-family: 'Courier New', monospace;
+    letter-spacing: 0.5px;
+}
+
+.hidrante-footer .actions {
+    display: flex;
+    gap: 8px;
+}
+
+.hidrante-footer .btn-cyber {
+    padding: 6px 16px;
+    border: 1px solid rgba(88, 166, 255, 0.2);
+    border-radius: 8px;
+    background: rgba(88, 166, 255, 0.05);
+    color: rgba(139, 148, 158, 0.7);
+    font-size: 11px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    font-family: var(--font-family);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.hidrante-footer .btn-cyber:hover {
+    background: rgba(88, 166, 255, 0.12);
+    border-color: rgba(88, 166, 255, 0.3);
+    color: #58a6ff;
+    box-shadow: 0 0 20px rgba(88, 166, 255, 0.05);
+}
+
+.hidrante-footer .btn-cyber.activo:hover {
+    border-color: rgba(63, 185, 80, 0.3);
+    color: #3fb950;
+    box-shadow: 0 0 20px rgba(63, 185, 80, 0.05);
+}
+
+.hidrante-footer .btn-cyber.inactivo:hover {
+    border-color: rgba(248, 81, 73, 0.3);
+    color: #f85149;
+    box-shadow: 0 0 20px rgba(248, 81, 73, 0.05);
+}
+
+/* ===== RESPONSIVE ===== */
+@media (max-width: 768px) {
+    .hidrantes-futuristic {
+        grid-template-columns: 1fr 1fr;
+        gap: 16px;
+    }
+    
+    .hidrante-card {
+        padding: 18px 16px;
+    }
+    
+    .hidrante-nombre {
+        font-size: 17px;
+    }
+    
+    .hidrante-metrics {
+        grid-template-columns: 1fr 1fr;
+        gap: 8px;
+    }
+    
+    .hidrante-metric .value {
+        font-size: 17px;
+    }
+}
+
+@media (max-width: 480px) {
+    .hidrantes-futuristic {
+        grid-template-columns: 1fr;
+    }
+    
+    .hidrante-metrics {
+        grid-template-columns: 1fr 1fr;
+    }
+}
