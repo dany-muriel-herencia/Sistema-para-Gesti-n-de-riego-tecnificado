@@ -1,0 +1,64 @@
+{
+  "fuente": "archivo_json_simulado",
+  "ubicacion": "La Yarada, Tacna",
+  "actualizado_en": "2026-06-25T08:00:00-05:00",
+  "clima": {
+    "condicion": "Soleado con viento costero",
+    "temperatura_ambiente": 27.4,
+    "humedad_relativa": 48,
+    "viento_kmh": 18,
+    "radiacion": "alta"
+  },
+  "hidrantes": [
+    {
+      "id": "H-01",
+      "nombre": "Hidrante Norte",
+      "disponible": true,
+      "capacidad_simultanea": 2
+    },
+    {
+      "id": "H-02",
+      "nombre": "Hidrante Sur",
+      "disponible": true,
+      "capacidad_simultanea": 1
+    }
+  ],
+  "parcelas": [
+    {
+      "id": "P-01",
+      "nombre": "Olivos Sector A",
+      "cultivo": "Olivo",
+      "humedad": 18,
+      "temperatura": 29.6,
+      "umbral_humedad": 28,
+      "sensor": "S-HUM-01"
+    },
+    {
+      "id": "P-02",
+      "nombre": "Vid Sector B",
+      "cultivo": "Vid",
+      "humedad": 34,
+      "temperatura": 26.8,
+      "umbral_humedad": 30,
+      "sensor": "S-HUM-02"
+    },
+    {
+      "id": "P-03",
+      "nombre": "Aji Sector C",
+      "cultivo": "Aji",
+      "humedad": 22,
+      "temperatura": 31.1,
+      "umbral_humedad": 32,
+      "sensor": "S-HUM-03"
+    },
+    {
+      "id": "P-04",
+      "nombre": "Maiz Sector D",
+      "cultivo": "Maiz",
+      "humedad": 27,
+      "temperatura": 28.3,
+      "umbral_humedad": 29,
+      "sensor": "S-HUM-04"
+    }
+  ]
+}
