@@ -181,28 +181,149 @@ function toggleHidranteFromCard(id) {
     }
 }
 
-function agregarParcela() {
+async function agregarParcela() {
     if (!window.DATOS) return;
-    const nombres = ['Santa Rosa', 'Los Olivos', 'El Porvenir', 'San Isidro', 'Villa Hermosa'];
-    const cultivos = ['Palta', 'Mango', 'Limón', 'Naranja', 'Fresa'];
-    const newId = window.DATOS.parcelas.length > 0 ? Math.max(...window.DATOS.parcelas.map(p => p.id)) + 1 : 1;
-    const nom = nombres[Math.floor(Math.random() * nombres.length)];
-    const cul = cultivos[Math.floor(Math.random() * cultivos.length)];
-    const hum = 12 + Math.random() * 38;
-    const temp = 24 + Math.random() * 10;
-    window.DATOS.parcelas.push({
-        id: newId,
-        nombre: `${nom} ${String.fromCharCode(65 + window.DATOS.parcelas.length)}`,
-        cultivo: cul,
-        humedad: Math.round(hum * 10) / 10,
-        temperatura: Math.round(temp * 10) / 10,
-        umbral: Math.round(25 + Math.random() * 15),
-        sensor: null
-    });
-    const e = typeof determinarEstado === 'function' ? determinarEstado(hum, temp) : 'optimo';
-    agregarEvento(`${e === 'critico' ? '🚨' : '🌱'} Nueva: ${nom} (${cul}) - ${e.toUpperCase()}`, e);
-    if (typeof renderMapa === 'function') renderMapa();
-    if (typeof actualizarMetricas === 'function') actualizarMetricas();
+
+    // Pedir datos al usuario
+    const nombre = prompt('Nombre de la parcela:', 'Nueva Parcela');
+    if (!nombre || !nombre.trim()) return;
+    const cultivo = prompt('Tipo de cultivo:', 'Olivo');
+    if (!cultivo || !cultivo.trim()) return;
+    const areaStr = prompt('Área en hectáreas:', '1.5');
+    const area = parseFloat(areaStr);
+    if (isNaN(area) || area <= 0) {
+        agregarEvento('❌ Área inválida. Debe ser un número mayor que 0.', 'error');
+        return;
+    }
+    const estado = prompt('Estado (activa / inactiva / seca):', 'activa') || 'activa';
+
+    agregarEvento('🔄 Guardando parcela en la base de datos...', 'sistema');
+
+    try {
+        // Determinar API_URL — definido en data.js
+        const baseUrl = (typeof API_URL !== 'undefined') ? API_URL : '/backend/api';
+        const response = await fetch(`${baseUrl}/parcelas.php`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+                nombre: nombre.trim(),
+                cultivo: cultivo.trim(),
+                area: area,
+                estado: estado.trim()
+            })
+        });
+
+        if (!response.ok) {
+            throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+        }
+
+        const json = await response.json();
+
+        if (!json.success) {
+            throw new Error(json.error || 'El backend rechazó la parcela.');
+        }
+
+        // Éxito: agregar a la UI usando los datos confirmados por el backend
+        const nuevaParcela = {
+            id: json.data.id,
+            nombre: json.data.nombre,
+            cultivo: json.data.cultivo,
+            humedad: Math.round((20 + Math.random() * 30) * 10) / 10,
+            temperatura: Math.round((25 + Math.random() * 8) * 10) / 10,
+            umbral: 30,
+            sensor: null,
+            estado: json.data.estado
+        };
+        window.DATOS.parcelas.push(nuevaParcela);
+
+        const e = typeof determinarEstado === 'function'
+            ? determinarEstado(nuevaParcela.humedad, nuevaParcela.temperatura)
+            : 'optimo';
+        agregarEvento(`✅ Parcela '${json.data.nombre}' (ID: ${json.data.id}) guardada en MySQL.`, 'success');
+        agregarEvento(`${ e === 'critico' ? '🚨' : '🌱'} ${json.data.nombre} (${json.data.cultivo}) - ${e.toUpperCase()}`, e);
+
+        if (typeof renderMapa === 'function') renderMapa();
+        if (typeof actualizarMetricas === 'function') actualizarMetricas();
+
+    } catch (err) {
+        console.error('❌ Error al agregar parcela:', err);
+        agregarEvento(`❌ Error al guardar parcela: ${err.message}`, 'error');
+    }
+}
+
+// ============================================
+// AGREGAR HIDRANTE REAL (POST A LA API)
+// ============================================
+
+async function agregarHidrante(datosFormulario = null) {
+    if (!window.DATOS) return;
+
+    let nombre, capacidad, estado;
+
+    if (datosFormulario) {
+        // Llamado desde el formulario de hidrantes.html
+        nombre = datosFormulario.nombre;
+        capacidad = datosFormulario.capacidad;
+        estado = datosFormulario.estado;
+    } else {
+        // Llamado directamente (ej. desde el dashboard)
+        nombre = prompt('Nombre del hidrante:', 'Nuevo Hidrante');
+        if (!nombre || !nombre.trim()) return;
+        const capStr = prompt('Capacidad (unidades simultáneas):', '1');
+        capacidad = parseInt(capStr);
+        if (isNaN(capacidad) || capacidad < 1) {
+            agregarEvento('❌ Capacidad inválida. Debe ser un entero >= 1.', 'error');
+            return;
+        }
+        estado = prompt('Estado (disponible / en_uso / inactivo):', 'disponible') || 'disponible';
+    }
+
+    agregarEvento('🔄 Guardando hidrante en la base de datos...', 'sistema');
+
+    try {
+        const baseUrl = (typeof API_URL !== 'undefined') ? API_URL : '/backend/api';
+        const response = await fetch(`${baseUrl}/hidrantes.php`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+                nombre: nombre.trim(),
+                capacidad: capacidad,
+                estado: estado.trim()
+            })
+        });
+
+        if (!response.ok) {
+            throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+        }
+
+        const json = await response.json();
+
+        if (!json.success) {
+            throw new Error(json.error || 'El backend rechazó el hidrante.');
+        }
+
+        // Éxito: agregar a la UI
+        const nuevoHidrante = {
+            id: json.data.id,
+            nombre: json.data.nombre,
+            capacidad: json.data.capacidad,
+            disponible: json.data.estado === 'disponible',
+            estado: json.data.estado
+        };
+        window.DATOS.hidrantes.push(nuevoHidrante);
+
+        agregarEvento(`✅ Hidrante '${json.data.nombre}' (ID: ${json.data.id}, cap: ${json.data.capacidad}) guardado en MySQL.`, 'success');
+
+        if (typeof renderHidrantes === 'function') renderHidrantes();
+        if (typeof actualizarMetricas === 'function') actualizarMetricas();
+
+        return json.data; // Para uso del formulario
+
+    } catch (err) {
+        console.error('❌ Error al agregar hidrante:', err);
+        agregarEvento(`❌ Error al guardar hidrante: ${err.message}`, 'error');
+        throw err; // Re-lanzar para que el formulario pueda manejarlo
+    }
 }
 
 function resetearDatos() {
@@ -315,16 +436,8 @@ function iniciarSimulacion() {
     }, 5000);
 }
 
-// ============================================
-// OCULTAR LOADING MANUALMENTE (FALLO DE SEGURIDAD)
-// ============================================
-function ocultarLoading() {
-    const loading = document.getElementById('loadingOverlay');
-    if (loading) {
-        loading.classList.add('hidden');
-        console.log('✅ Loading ocultado (manual)');
-    }
-}
+// (ocultarLoading se define más abajo - línea ~487)
+
 
 // ============================================
 // INICIALIZACIÓN PRINCIPAL
@@ -352,10 +465,15 @@ async function init() {
     }, 3000);
     
     try {
+        // Actualizar estado de carga
+        const loadingStatus = document.getElementById('loadingStatus');
+        
         // Cargar datos desde la API
         if (typeof cargarDatosDesdeAPI === 'function') {
             console.log('📡 Cargando datos desde API...');
+            if (loadingStatus) loadingStatus.textContent = 'Cargando datos del sistema...';
             await cargarDatosDesdeAPI();
+            if (loadingStatus) loadingStatus.textContent = '✅ Datos cargados';
             console.log('✅ Datos cargados correctamente');
         } else {
             console.warn('⚠️ cargarDatosDesdeAPI no está definida');
@@ -513,6 +631,7 @@ window.cambiarHumedad = cambiarHumedad;
 window.toggleHidrante = toggleHidrante;
 window.toggleHidranteFromCard = toggleHidranteFromCard;
 window.agregarParcela = agregarParcela;
+window.agregarHidrante = agregarHidrante;
 window.resetearDatos = resetearDatos;
 window.seleccionar = seleccionar;
 window.limpiarConsola = limpiarConsola;

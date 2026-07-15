@@ -21,8 +21,8 @@
 </head>
 <body>
 
-<!-- LOADING OVERLAY -->
-<div class="loading-overlay" id="loadingOverlay">
+<!-- LOADING OVERLAY - Se oculta con JS al terminar init() -->
+<div class="loading-overlay" id="loadingOverlay" style="opacity:1;visibility:visible;display:flex;">
     <div class="loading-spinner"></div>
     <div class="loading-text">🌾 Cargando La Yarada...</div>
     <div class="loading-subtext" id="loadingStatus">Conectando con la base de datos...</div>
@@ -49,6 +49,7 @@
             <span id="reloj">--:--:--</span>
         </div>
         <span id="dbStatus" class="db-status connecting">⏳ Conectando...</span>
+        <span id="pyStatus" class="db-status" style="margin-left:8px;font-size:11px;padding:3px 8px;border-radius:12px;background:rgba(88,166,255,0.1);color:#58a6ff;border:1px solid rgba(88,166,255,0.3);display:none;">🐍 Python: --</span>
     </div>
 </header>
 
@@ -577,26 +578,95 @@ window.recargarTurnos = recargarTurnos;
 console.log('📦 Sistema de carga de turnos con AJAX inicializado');
 
 // ============================================
-// 🔥 FORZAR OCULTAR LOADING
+// 🔥 FORZAR OCULTAR LOADING - GARANTIZADO
 // ============================================
 (function() {
-    function ocultarLoading() {
+    function forceHideLoading() {
         var loading = document.getElementById('loadingOverlay');
-        if (loading) {
-            loading.classList.add('hidden');
+        if (!loading) return;
+        loading.style.transition = 'opacity 0.4s ease';
+        loading.style.opacity = '0';
+        loading.style.pointerEvents = 'none';
+        setTimeout(function() {
             loading.style.display = 'none';
-            loading.style.opacity = '0';
-            loading.style.pointerEvents = 'none';
-            console.log('🔥 Loading ocultado');
-            return true;
-        }
-        return false;
+            loading.style.visibility = 'hidden';
+        }, 450);
+        console.log('🔥 Loading forzado a ocultar');
     }
     
-    ocultarLoading();
-    setTimeout(ocultarLoading, 100);
-    setTimeout(ocultarLoading, 500);
-    setTimeout(ocultarLoading, 1000);
+    // Intentar ocultar inmediatamente al cargar el script
+    // y con múltiples fallbacks
+    if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', function() {
+            // El init() de dashboard.js lo ocultará, pero ponemos un backup
+            setTimeout(forceHideLoading, 4000); // máximo 4s de espera
+        });
+    } else {
+        setTimeout(forceHideLoading, 4000);
+    }
+    
+    // Backup extremo: si después de 6 segundos sigue visible, forzar
+    setTimeout(forceHideLoading, 6000);
+})();
+
+// ============================================
+// 🐍 MONITOR DE SIMULACIÓN PYTHON
+// ============================================
+(function() {
+    // Consulta el API PHP cada 5s para ver si hay turnos nuevos del script Python
+    var lastTurnoId = 0;
+    var pyBadge = document.getElementById('pyStatus');
+    
+    function checkPythonSimulation() {
+        var apiUrl = (window.CONFIG && window.CONFIG.api && window.CONFIG.api.baseUrl)
+            ? window.CONFIG.api.baseUrl
+            : 'http://localhost:8000/backend/api';
+        
+        fetch(apiUrl + '/riego.php?limit=1&order=desc')
+            .then(function(r) { return r.ok ? r.json() : null; })
+            .then(function(data) {
+                if (!data) return;
+                var turnos = data.turnos || data.data || [];
+                if (turnos.length === 0) return;
+                
+                var ultimo = turnos[0];
+                var turnoId = parseInt(ultimo.id) || 0;
+                
+                if (pyBadge) {
+                    pyBadge.style.display = 'inline-flex';
+                    
+                    if (ultimo.estado === 'regando') {
+                        pyBadge.style.background = 'rgba(63,185,80,0.15)';
+                        pyBadge.style.color = '#3fb950';
+                        pyBadge.style.borderColor = 'rgba(63,185,80,0.4)';
+                        pyBadge.textContent = '🐍 Python: Regando turno #' + turnoId;
+                    } else {
+                        pyBadge.style.background = 'rgba(88,166,255,0.1)';
+                        pyBadge.style.color = '#58a6ff';
+                        pyBadge.style.borderColor = 'rgba(88,166,255,0.3)';
+                        pyBadge.textContent = '🐍 Python: ' + (turnos.length) + ' turnos en DB';
+                    }
+                    
+                    // Notificar en consola solo si hay nuevo turno
+                    if (turnoId > lastTurnoId && lastTurnoId > 0) {
+                        if (typeof agregarEvento === 'function') {
+                            agregarEvento('🐍 [Python] Nuevo turno #' + turnoId + ' - ' + (ultimo.estado || 'completado'), 'riego');
+                        }
+                    }
+                    lastTurnoId = turnoId;
+                }
+            })
+            .catch(function() {
+                // El Python puede estar corriendo sin servidor PHP activo
+                if (pyBadge) pyBadge.style.display = 'none';
+            });
+    }
+    
+    // Esperar a que el DOM esté listo antes de empezar a polling
+    document.addEventListener('DOMContentLoaded', function() {
+        setTimeout(checkPythonSimulation, 2000);
+        setInterval(checkPythonSimulation, 5000);
+    });
 })();
 </script>
 
