@@ -11,30 +11,34 @@ class Monitor
 
     public function solicitarRiego(Parcela $parcela, Hidrant $hidrante): string
     {
+        // Usar getters en lugar de acceder directamente a propiedades
         if (!$hidrante->disponible) {
-            $this->eventos[] = "Monitor bloquea {$parcela->id}: {$hidrante->id} no disponible";
+            $this->eventos[] = "Monitor bloquea {$parcela->getId()}: {$hidrante->id} no disponible";
             return 'bloqueado';
         }
 
         if (!$this->semaforo->wait()) {
-            $this->eventos[] = "Monitor hace esperar {$parcela->id}: sin hidrantes libres";
+            $this->eventos[] = "Monitor hace esperar {$parcela->getId()}: sin hidrantes libres";
             return 'en espera';
         }
 
-        $this->activos[] = $parcela->id;
-        $this->eventos[] = "Monitor concede riego a {$parcela->id} usando {$hidrante->id}";
+        $this->activos[] = $parcela->getId(); // Usar getter
+        $this->eventos[] = "Monitor concede riego a {$parcela->getId()} usando {$hidrante->id}";
 
         return 'activo';
     }
 
     public function finalizarRiego(Parcela $parcela): void
     {
+        // Usar getter para obtener el ID
+        $parcelaId = $parcela->getId();
+
         $this->activos = array_values(array_filter(
             $this->activos,
-            fn (string $id): bool => $id !== $parcela->id
+            fn ($id): bool => $id !== $parcelaId
         ));
         $this->semaforo->signal();
-        $this->eventos[] = "Monitor libera {$parcela->id}. Hidrantes libres: {$this->semaforo->disponibles()}";
+        $this->eventos[] = "Monitor libera {$parcelaId}. Hidrantes libres: {$this->semaforo->disponibles()}";
     }
 
     public function eventos(): array

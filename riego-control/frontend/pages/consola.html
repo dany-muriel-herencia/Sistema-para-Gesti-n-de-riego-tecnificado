@@ -1,0 +1,34 @@
+<!-- ========================================== -->
+<!-- CONSOLA - PÁGINA COMPLETA -->
+<!-- ========================================== -->
+
+<div class="panel">
+    <div class="panel-header">
+        <div class="title">
+            <span class="material-symbols-outlined">terminal</span>
+            <h2>📡 Consola de Eventos</h2>
+        </div>
+        <div class="console-controls">
+            <span class="counter" id="eventCounter">0 eventos</span>
+            <button class="btn-sm" onclick="limpiarConsola()">Limpiar</button>
+            <button class="btn-sm" id="pauseBtn" onclick="togglePausa()">⏸️ Pausar</button>
+            <select class="btn-sm" id="filterSelect" onchange="filtrarConsola(this.value)">
+                <option value="all">📋 Todos</option>
+                <option value="productor">🌱 Productor</option>
+                <option value="consumidor">⏳ Consumidor</option>
+                <option value="monitor">🚦 Monitor</option>
+                <option value="sensor">📊 Sensor</option>
+                <option value="hidrante">🚿 Hidrante</option>
+                <option value="riego">💧 Riego</option>
+                <option value="alerta">🔔 Alerta</option>
+                <option value="critico">🚨 Crítico</option>
+                <option value="success">✅ Éxito</option>
+                <option value="warning">⚠️ Advertencia</option>
+                <option value="error">❌ Error</option>
+            </select>
+        </div>
+    </div>
+    <div class="console-output" id="consoleOutput">
+        <!-- Renderizado por JS -->
+    </div>
+</div>

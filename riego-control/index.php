@@ -1,16 +1,14 @@
 <?php
+// index.php - Punto de entrada principal
 
-require_once __DIR__ . '/app/Controllers/ParcelaController.php';
-require_once __DIR__ . '/app/Controllers/RiegoController.php';
+// Verificar si la solicitud es para la API
+$path = $_SERVER['REQUEST_URI'] ?? '';
+if (strpos($path, '/backend/api/') === 0) {
+    // Dejar que el servidor maneje las API directamente
+    return false;
+}
 
-$parcelaController = new ParcelaController();
-$riegoController = new RiegoController();
-
-$parcelas = $parcelaController->listar();
-$clima = $parcelaController->clima();
-$plan = $riegoController->planificar();
-$turnos = $plan['turnos'];
-$hidrantes = $plan['hidrantes'];
-$eventos = $plan['eventos'];
-
-require __DIR__ . '/app/Views/dashboard.php';
+// Si no es API, redirigir al frontend
+header('Location: frontend/index.html');
+exit;
+?>

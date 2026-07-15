@@ -10,56 +10,35 @@ class Database
             return self::$connection;
         }
 
-        $config = self::loadConfig();
-        $dsn = sprintf('mysql:host=%s;port=%d;dbname=%s;charset=%s', $config['DB_HOST'], $config['DB_PORT'], $config['DB_DATABASE'], $config['DB_CHARSET']);
+        // 🔥 CONEXIÓN CON PUERTO 3307
+        $host = '127.0.0.1';
+        $port = 3306;  // ← PUERTO CORRECTO
+        $dbname = 'sistema_riego';
+        $username = 'root';
+        $password = '';
+        $charset = 'utf8mb4';
+
+        $dsn = sprintf('mysql:host=%s;port=%d;dbname=%s;charset=%s', $host, $port, $dbname, $charset);
         $options = [
             PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,
             PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC,
             PDO::ATTR_EMULATE_PREPARES => false,
+            PDO::MYSQL_ATTR_INIT_COMMAND => "SET NAMES utf8mb4"
         ];
 
-        self::$connection = new PDO($dsn, $config['DB_USERNAME'], $config['DB_PASSWORD'], $options);
-        return self::$connection;
-    }
-
-    private static function loadConfig(): array
-    {
-        $defaults = [
-            'DB_HOST' => '127.0.0.1',
-            'DB_PORT' => 3306,
-            'DB_DATABASE' => 'sistema_riego',
-            'DB_USERNAME' => 'root',
-            'DB_PASSWORD' => '',
-            'DB_CHARSET' => 'utf8mb4',
-        ];
-
-        $envFile = __DIR__ . '/../../.env';
-        if (!file_exists($envFile)) {
-            return $defaults;
-        }
-
-        $contents = file($envFile, FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES);
-        if ($contents === false) {
-            return $defaults;
-        }
-
-        foreach ($contents as $line) {
-            $line = trim($line);
-            if ($line === '' || str_starts_with($line, '#')) {
-                continue;
-            }
-
-            $parts = explode('=', $line, 2);
-            if (count($parts) !== 2) {
-                continue;
-            }
-
-            [$key, $value] = array_map('trim', $parts);
-            if ($key !== '' && array_key_exists($key, $defaults)) {
-                $defaults[$key] = is_numeric($value) ? (int) $value : $value;
+        try {
+            self::$connection = new PDO($dsn, $username, $password, $options);
+            return self::$connection;
+        } catch (PDOException $e) {
+            // Si falla con 127.0.0.1, intenta con localhost
+            try {
+                $dsn = sprintf('mysql:host=localhost;port=%d;dbname=%s;charset=%s', $port, $dbname, $charset);
+                self::$connection = new PDO($dsn, $username, $password, $options);
+                return self::$connection;
+            } catch (PDOException $e) {
+                error_log("Error de conexión a MySQL: " . $e->getMessage());
+                throw new PDOException("No se pudo conectar a la base de datos en el puerto $port. Verifica que MySQL esté corriendo.");
             }
         }
-
-        return $defaults;
     }
 }

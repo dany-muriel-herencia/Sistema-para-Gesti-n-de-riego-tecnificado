@@ -1,0 +1,804 @@
+{
+  "flujo_sensores": [
+    {
+      "id_lectura": 1,
+      "parcela_id": 4,
+      "parcela_nombre": "Maiz Sector D",
+      "temperatura": 16.8,
+      "humedad": 40.6,
+      "timestamp": "2026-07-14T21:31:43.161388"
+    },
+    {
+      "id_lectura": 2,
+      "parcela_id": 2,
+      "parcela_nombre": "Vid Sector B",
+      "temperatura": 32.0,
+      "humedad": 21.2,
+      "timestamp": "2026-07-14T21:31:46.161388"
+    },
+    {
+      "id_lectura": 3,
+      "parcela_id": 3,
+      "parcela_nombre": "Aji Sector C",
+      "temperatura": 23.8,
+      "humedad": 48.6,
+      "timestamp": "2026-07-14T21:31:49.161388"
+    },
+    {
+      "id_lectura": 4,
+      "parcela_id": 2,
+      "parcela_nombre": "Vid Sector B",
+      "temperatura": 19.4,
+      "humedad": 49.0,
+      "timestamp": "2026-07-14T21:31:52.161388"
+    },
+    {
+      "id_lectura": 5,
+      "parcela_id": 3,
+      "parcela_nombre": "Aji Sector C",
+      "temperatura": 39.8,
+      "humedad": 21.8,
+      "timestamp": "2026-07-14T21:31:55.161388"
+    },
+    {
+      "id_lectura": 6,
+      "parcela_id": 2,
+      "parcela_nombre": "Vid Sector B",
+      "temperatura": 23.0,
+      "humedad": 39.6,
+      "timestamp": "2026-07-14T21:31:58.161388"
+    },
+    {
+      "id_lectura": 7,
+      "parcela_id": 4,
+      "parcela_nombre": "Maiz Sector D",
+      "temperatura": 36.3,
+      "humedad": 13.4,
+      "timestamp": "2026-07-14T21:32:01.161388"
+    },
+    {
+      "id_lectura": 8,
+      "parcela_id": 5,
+      "parcela_nombre": "Tomate Sector E",
+      "temperatura": 22.4,
+      "humedad": 36.4,
+      "timestamp": "2026-07-14T21:32:04.161388"
+    },
+    {
+      "id_lectura": 9,
+      "parcela_id": 5,
+      "parcela_nombre": "Tomate Sector E",
+      "temperatura": 39.4,
+      "humedad": 19.3,
+      "timestamp": "2026-07-14T21:32:07.161388"
+    },
+    {
+      "id_lectura": 10,
+      "parcela_id": 1,
+      "parcela_nombre": "Olivos Sector A",
+      "temperatura": 16.5,
+      "humedad": 40.9,
+      "timestamp": "2026-07-14T21:32:10.161388"
+    },
+    {
+      "id_lectura": 11,
+      "parcela_id": 2,
+      "parcela_nombre": "Vid Sector B",
+      "temperatura": 38.0,
+      "humedad": 23.3,
+      "timestamp": "2026-07-14T21:32:13.161388"
+    },
+    {
+      "id_lectura": 12,
+      "parcela_id": 5,
+      "parcela_nombre": "Tomate Sector E",
+      "temperatura": 38.6,
+      "humedad": 16.7,
+      "timestamp": "2026-07-14T21:32:16.161388"
+    },
+    {
+      "id_lectura": 13,
+      "parcela_id": 4,
+      "parcela_nombre": "Maiz Sector D",
+      "temperatura": 26.7,
+      "humedad": 52.9,
+      "timestamp": "2026-07-14T21:32:19.161388"
+    },
+    {
+      "id_lectura": 14,
+      "parcela_id": 3,
+      "parcela_nombre": "Aji Sector C",
+      "temperatura": 23.8,
+      "humedad": 36.9,
+      "timestamp": "2026-07-14T21:32:22.161388"
+    },
+    {
+      "id_lectura": 15,
+      "parcela_id": 5,
+      "parcela_nombre": "Tomate Sector E",
+      "temperatura": 31.5,
+      "humedad": 11.3,
+      "timestamp": "2026-07-14T21:32:25.161388"
+    },
+    {
+      "id_lectura": 16,
+      "parcela_id": 4,
+      "parcela_nombre": "Maiz Sector D",
+      "temperatura": 17.1,
+      "humedad": 53.5,
+      "timestamp": "2026-07-14T21:32:28.161388"
+    },
+    {
+      "id_lectura": 17,
+      "parcela_id": 2,
+      "parcela_nombre": "Vid Sector B",
+      "temperatura": 27.8,
+      "humedad": 48.2,
+      "timestamp": "2026-07-14T21:32:31.161388"
+    },
+    {
+      "id_lectura": 18,
+      "parcela_id": 3,
+      "parcela_nombre": "Aji Sector C",
+      "temperatura": 26.3,
+      "humedad": 59.3,
+      "timestamp": "2026-07-14T21:32:34.161388"
+    },
+    {
+      "id_lectura": 19,
+      "parcela_id": 2,
+      "parcela_nombre": "Vid Sector B",
+      "temperatura": 23.8,
+      "humedad": 36.4,
+      "timestamp": "2026-07-14T21:32:37.161388"
+    },
+    {
+      "id_lectura": 20,
+      "parcela_id": 2,
+      "parcela_nombre": "Vid Sector B",
+      "temperatura": 20.1,
+      "humedad": 48.1,
+      "timestamp": "2026-07-14T21:32:40.161388"
+    },
+    {
+      "id_lectura": 21,
+      "parcela_id": 4,
+      "parcela_nombre": "Maiz Sector D",
+      "temperatura": 24.1,
+      "humedad": 45.2,
+      "timestamp": "2026-07-14T21:32:43.161388"
+    },
+    {
+      "id_lectura": 22,
+      "parcela_id": 2,
+      "parcela_nombre": "Vid Sector B",
+      "temperatura": 21.1,
+      "humedad": 53.3,
+      "timestamp": "2026-07-14T21:32:46.161388"
+    },
+    {
+      "id_lectura": 23,
+      "parcela_id": 2,
+      "parcela_nombre": "Vid Sector B",
+      "temperatura": 19.2,
+      "humedad": 54.8,
+      "timestamp": "2026-07-14T21:32:49.161388"
+    },
+    {
+      "id_lectura": 24,
+      "parcela_id": 2,
+      "parcela_nombre": "Vid Sector B",
+      "temperatura": 15.5,
+      "humedad": 39.8,
+      "timestamp": "2026-07-14T21:32:52.161388"
+    },
+    {
+      "id_lectura": 25,
+      "parcela_id": 1,
+      "parcela_nombre": "Olivos Sector A",
+      "temperatura": 17.3,
+      "humedad": 45.3,
+      "timestamp": "2026-07-14T21:32:55.161388"
+    },
+    {
+      "id_lectura": 26,
+      "parcela_id": 1,
+      "parcela_nombre": "Olivos Sector A",
+      "temperatura": 30.2,
+      "humedad": 12.1,
+      "timestamp": "2026-07-14T21:32:58.161388"
+    },
+    {
+      "id_lectura": 27,
+      "parcela_id": 1,
+      "parcela_nombre": "Olivos Sector A",
+      "temperatura": 25.2,
+      "humedad": 55.8,
+      "timestamp": "2026-07-14T21:33:01.161388"
+    },
+    {
+      "id_lectura": 28,
+      "parcela_id": 1,
+      "parcela_nombre": "Olivos Sector A",
+      "temperatura": 38.6,
+      "humedad": 12.9,
+      "timestamp": "2026-07-14T21:33:04.161388"
+    },
+    {
+      "id_lectura": 29,
+      "parcela_id": 2,
+      "parcela_nombre": "Vid Sector B",
+      "temperatura": 22.1,
+      "humedad": 46.3,
+      "timestamp": "2026-07-14T21:33:07.161388"
+    },
+    {
+      "id_lectura": 30,
+      "parcela_id": 5,
+      "parcela_nombre": "Tomate Sector E",
+      "temperatura": 18.6,
+      "humedad": 47.1,
+      "timestamp": "2026-07-14T21:33:10.161388"
+    },
+    {
+      "id_lectura": 31,
+      "parcela_id": 3,
+      "parcela_nombre": "Aji Sector C",
+      "temperatura": 21.8,
+      "humedad": 51.0,
+      "timestamp": "2026-07-14T21:33:13.161388"
+    },
+    {
+      "id_lectura": 32,
+      "parcela_id": 1,
+      "parcela_nombre": "Olivos Sector A",
+      "temperatura": 23.0,
+      "humedad": 49.9,
+      "timestamp": "2026-07-14T21:33:16.161388"
+    },
+    {
+      "id_lectura": 33,
+      "parcela_id": 3,
+      "parcela_nombre": "Aji Sector C",
+      "temperatura": 31.1,
+      "humedad": 11.3,
+      "timestamp": "2026-07-14T21:33:19.161388"
+    },
+    {
+      "id_lectura": 34,
+      "parcela_id": 3,
+      "parcela_nombre": "Aji Sector C",
+      "temperatura": 15.1,
+      "humedad": 45.6,
+      "timestamp": "2026-07-14T21:33:22.161388"
+    },
+    {
+      "id_lectura": 35,
+      "parcela_id": 3,
+      "parcela_nombre": "Aji Sector C",
+      "temperatura": 16.3,
+      "humedad": 57.9,
+      "timestamp": "2026-07-14T21:33:25.161388"
+    },
+    {
+      "id_lectura": 36,
+      "parcela_id": 3,
+      "parcela_nombre": "Aji Sector C",
+      "temperatura": 32.0,
+      "humedad": 24.1,
+      "timestamp": "2026-07-14T21:33:28.161388"
+    },
+    {
+      "id_lectura": 37,
+      "parcela_id": 1,
+      "parcela_nombre": "Olivos Sector A",
+      "temperatura": 24.6,
+      "humedad": 36.7,
+      "timestamp": "2026-07-14T21:33:31.161388"
+    },
+    {
+      "id_lectura": 38,
+      "parcela_id": 2,
+      "parcela_nombre": "Vid Sector B",
+      "temperatura": 32.3,
+      "humedad": 19.9,
+      "timestamp": "2026-07-14T21:33:34.161388"
+    },
+    {
+      "id_lectura": 39,
+      "parcela_id": 2,
+      "parcela_nombre": "Vid Sector B",
+      "temperatura": 35.2,
+      "humedad": 18.6,
+      "timestamp": "2026-07-14T21:33:37.161388"
+    },
+    {
+      "id_lectura": 40,
+      "parcela_id": 4,
+      "parcela_nombre": "Maiz Sector D",
+      "temperatura": 17.3,
+      "humedad": 50.6,
+      "timestamp": "2026-07-14T21:33:40.161388"
+    },
+    {
+      "id_lectura": 41,
+      "parcela_id": 1,
+      "parcela_nombre": "Olivos Sector A",
+      "temperatura": 24.6,
+      "humedad": 44.8,
+      "timestamp": "2026-07-14T21:33:43.161388"
+    },
+    {
+      "id_lectura": 42,
+      "parcela_id": 1,
+      "parcela_nombre": "Olivos Sector A",
+      "temperatura": 36.2,
+      "humedad": 23.6,
+      "timestamp": "2026-07-14T21:33:46.161388"
+    },
+    {
+      "id_lectura": 43,
+      "parcela_id": 3,
+      "parcela_nombre": "Aji Sector C",
+      "temperatura": 19.6,
+      "humedad": 57.9,
+      "timestamp": "2026-07-14T21:33:49.161388"
+    },
+    {
+      "id_lectura": 44,
+      "parcela_id": 4,
+      "parcela_nombre": "Maiz Sector D",
+      "temperatura": 18.8,
+      "humedad": 59.3,
+      "timestamp": "2026-07-14T21:33:52.161388"
+    },
+    {
+      "id_lectura": 45,
+      "parcela_id": 2,
+      "parcela_nombre": "Vid Sector B",
+      "temperatura": 23.2,
+      "humedad": 44.6,
+      "timestamp": "2026-07-14T21:33:55.161388"
+    },
+    {
+      "id_lectura": 46,
+      "parcela_id": 3,
+      "parcela_nombre": "Aji Sector C",
+      "temperatura": 31.6,
+      "humedad": 20.7,
+      "timestamp": "2026-07-14T21:33:58.161388"
+    },
+    {
+      "id_lectura": 47,
+      "parcela_id": 3,
+      "parcela_nombre": "Aji Sector C",
+      "temperatura": 22.7,
+      "humedad": 35.6,
+      "timestamp": "2026-07-14T21:34:01.161388"
+    },
+    {
+      "id_lectura": 48,
+      "parcela_id": 3,
+      "parcela_nombre": "Aji Sector C",
+      "temperatura": 23.6,
+      "humedad": 38.4,
+      "timestamp": "2026-07-14T21:34:04.161388"
+    },
+    {
+      "id_lectura": 49,
+      "parcela_id": 5,
+      "parcela_nombre": "Tomate Sector E",
+      "temperatura": 27.6,
+      "humedad": 58.3,
+      "timestamp": "2026-07-14T21:34:07.161388"
+    },
+    {
+      "id_lectura": 50,
+      "parcela_id": 3,
+      "parcela_nombre": "Aji Sector C",
+      "temperatura": 23.2,
+      "humedad": 44.6,
+      "timestamp": "2026-07-14T21:34:10.161388"
+    },
+    {
+      "id_lectura": 51,
+      "parcela_id": 2,
+      "parcela_nombre": "Vid Sector B",
+      "temperatura": 31.6,
+      "humedad": 20.5,
+      "timestamp": "2026-07-14T21:34:13.161388"
+    },
+    {
+      "id_lectura": 52,
+      "parcela_id": 2,
+      "parcela_nombre": "Vid Sector B",
+      "temperatura": 17.9,
+      "humedad": 37.0,
+      "timestamp": "2026-07-14T21:34:16.161388"
+    },
+    {
+      "id_lectura": 53,
+      "parcela_id": 4,
+      "parcela_nombre": "Maiz Sector D",
+      "temperatura": 23.0,
+      "humedad": 54.0,
+      "timestamp": "2026-07-14T21:34:19.161388"
+    },
+    {
+      "id_lectura": 54,
+      "parcela_id": 5,
+      "parcela_nombre": "Tomate Sector E",
+      "temperatura": 27.5,
+      "humedad": 40.6,
+      "timestamp": "2026-07-14T21:34:22.161388"
+    },
+    {
+      "id_lectura": 55,
+      "parcela_id": 5,
+      "parcela_nombre": "Tomate Sector E",
+      "temperatura": 22.0,
+      "humedad": 39.6,
+      "timestamp": "2026-07-14T21:34:25.161388"
+    },
+    {
+      "id_lectura": 56,
+      "parcela_id": 2,
+      "parcela_nombre": "Vid Sector B",
+      "temperatura": 16.7,
+      "humedad": 49.9,
+      "timestamp": "2026-07-14T21:34:28.161388"
+    },
+    {
+      "id_lectura": 57,
+      "parcela_id": 5,
+      "parcela_nombre": "Tomate Sector E",
+      "temperatura": 20.7,
+      "humedad": 41.4,
+      "timestamp": "2026-07-14T21:34:31.161388"
+    },
+    {
+      "id_lectura": 58,
+      "parcela_id": 1,
+      "parcela_nombre": "Olivos Sector A",
+      "temperatura": 15.8,
+      "humedad": 45.9,
+      "timestamp": "2026-07-14T21:34:34.161388"
+    },
+    {
+      "id_lectura": 59,
+      "parcela_id": 5,
+      "parcela_nombre": "Tomate Sector E",
+      "temperatura": 31.8,
+      "humedad": 13.7,
+      "timestamp": "2026-07-14T21:34:37.161388"
+    },
+    {
+      "id_lectura": 60,
+      "parcela_id": 1,
+      "parcela_nombre": "Olivos Sector A",
+      "temperatura": 38.3,
+      "humedad": 23.1,
+      "timestamp": "2026-07-14T21:34:40.161388"
+    },
+    {
+      "id_lectura": 61,
+      "parcela_id": 5,
+      "parcela_nombre": "Tomate Sector E",
+      "temperatura": 20.1,
+      "humedad": 49.5,
+      "timestamp": "2026-07-14T21:34:43.161388"
+    },
+    {
+      "id_lectura": 62,
+      "parcela_id": 4,
+      "parcela_nombre": "Maiz Sector D",
+      "temperatura": 26.0,
+      "humedad": 54.3,
+      "timestamp": "2026-07-14T21:34:46.161388"
+    },
+    {
+      "id_lectura": 63,
+      "parcela_id": 1,
+      "parcela_nombre": "Olivos Sector A",
+      "temperatura": 21.0,
+      "humedad": 43.4,
+      "timestamp": "2026-07-14T21:34:49.161388"
+    },
+    {
+      "id_lectura": 64,
+      "parcela_id": 4,
+      "parcela_nombre": "Maiz Sector D",
+      "temperatura": 20.5,
+      "humedad": 36.8,
+      "timestamp": "2026-07-14T21:34:52.161388"
+    },
+    {
+      "id_lectura": 65,
+      "parcela_id": 1,
+      "parcela_nombre": "Olivos Sector A",
+      "temperatura": 33.3,
+      "humedad": 21.9,
+      "timestamp": "2026-07-14T21:34:55.161388"
+    },
+    {
+      "id_lectura": 66,
+      "parcela_id": 5,
+      "parcela_nombre": "Tomate Sector E",
+      "temperatura": 26.9,
+      "humedad": 47.6,
+      "timestamp": "2026-07-14T21:34:58.161388"
+    },
+    {
+      "id_lectura": 67,
+      "parcela_id": 5,
+      "parcela_nombre": "Tomate Sector E",
+      "temperatura": 35.0,
+      "humedad": 20.7,
+      "timestamp": "2026-07-14T21:35:01.161388"
+    },
+    {
+      "id_lectura": 68,
+      "parcela_id": 2,
+      "parcela_nombre": "Vid Sector B",
+      "temperatura": 22.1,
+      "humedad": 60.0,
+      "timestamp": "2026-07-14T21:35:04.161388"
+    },
+    {
+      "id_lectura": 69,
+      "parcela_id": 2,
+      "parcela_nombre": "Vid Sector B",
+      "temperatura": 33.5,
+      "humedad": 12.9,
+      "timestamp": "2026-07-14T21:35:07.161388"
+    },
+    {
+      "id_lectura": 70,
+      "parcela_id": 2,
+      "parcela_nombre": "Vid Sector B",
+      "temperatura": 25.8,
+      "humedad": 44.6,
+      "timestamp": "2026-07-14T21:35:10.161388"
+    },
+    {
+      "id_lectura": 71,
+      "parcela_id": 2,
+      "parcela_nombre": "Vid Sector B",
+      "temperatura": 36.3,
+      "humedad": 16.5,
+      "timestamp": "2026-07-14T21:35:13.161388"
+    },
+    {
+      "id_lectura": 72,
+      "parcela_id": 3,
+      "parcela_nombre": "Aji Sector C",
+      "temperatura": 27.5,
+      "humedad": 45.6,
+      "timestamp": "2026-07-14T21:35:16.161388"
+    },
+    {
+      "id_lectura": 73,
+      "parcela_id": 1,
+      "parcela_nombre": "Olivos Sector A",
+      "temperatura": 30.0,
+      "humedad": 19.5,
+      "timestamp": "2026-07-14T21:35:19.161388"
+    },
+    {
+      "id_lectura": 74,
+      "parcela_id": 1,
+      "parcela_nombre": "Olivos Sector A",
+      "temperatura": 36.7,
+      "humedad": 21.8,
+      "timestamp": "2026-07-14T21:35:22.161388"
+    },
+    {
+      "id_lectura": 75,
+      "parcela_id": 2,
+      "parcela_nombre": "Vid Sector B",
+      "temperatura": 26.0,
+      "humedad": 49.5,
+      "timestamp": "2026-07-14T21:35:25.161388"
+    },
+    {
+      "id_lectura": 76,
+      "parcela_id": 4,
+      "parcela_nombre": "Maiz Sector D",
+      "temperatura": 20.5,
+      "humedad": 37.0,
+      "timestamp": "2026-07-14T21:35:28.161388"
+    },
+    {
+      "id_lectura": 77,
+      "parcela_id": 5,
+      "parcela_nombre": "Tomate Sector E",
+      "temperatura": 27.7,
+      "humedad": 50.1,
+      "timestamp": "2026-07-14T21:35:31.161388"
+    },
+    {
+      "id_lectura": 78,
+      "parcela_id": 1,
+      "parcela_nombre": "Olivos Sector A",
+      "temperatura": 30.5,
+      "humedad": 10.4,
+      "timestamp": "2026-07-14T21:35:34.161388"
+    },
+    {
+      "id_lectura": 79,
+      "parcela_id": 3,
+      "parcela_nombre": "Aji Sector C",
+      "temperatura": 33.5,
+      "humedad": 13.6,
+      "timestamp": "2026-07-14T21:35:37.161388"
+    },
+    {
+      "id_lectura": 80,
+      "parcela_id": 1,
+      "parcela_nombre": "Olivos Sector A",
+      "temperatura": 26.2,
+      "humedad": 38.8,
+      "timestamp": "2026-07-14T21:35:40.161388"
+    },
+    {
+      "id_lectura": 81,
+      "parcela_id": 1,
+      "parcela_nombre": "Olivos Sector A",
+      "temperatura": 37.4,
+      "humedad": 15.8,
+      "timestamp": "2026-07-14T21:35:43.161388"
+    },
+    {
+      "id_lectura": 82,
+      "parcela_id": 1,
+      "parcela_nombre": "Olivos Sector A",
+      "temperatura": 31.6,
+      "humedad": 16.0,
+      "timestamp": "2026-07-14T21:35:46.161388"
+    },
+    {
+      "id_lectura": 83,
+      "parcela_id": 3,
+      "parcela_nombre": "Aji Sector C",
+      "temperatura": 20.5,
+      "humedad": 47.4,
+      "timestamp": "2026-07-14T21:35:49.161388"
+    },
+    {
+      "id_lectura": 84,
+      "parcela_id": 5,
+      "parcela_nombre": "Tomate Sector E",
+      "temperatura": 25.4,
+      "humedad": 36.2,
+      "timestamp": "2026-07-14T21:35:52.161388"
+    },
+    {
+      "id_lectura": 85,
+      "parcela_id": 5,
+      "parcela_nombre": "Tomate Sector E",
+      "temperatura": 35.3,
+      "humedad": 20.6,
+      "timestamp": "2026-07-14T21:35:55.161388"
+    },
+    {
+      "id_lectura": 86,
+      "parcela_id": 4,
+      "parcela_nombre": "Maiz Sector D",
+      "temperatura": 31.8,
+      "humedad": 12.4,
+      "timestamp": "2026-07-14T21:35:58.161388"
+    },
+    {
+      "id_lectura": 87,
+      "parcela_id": 5,
+      "parcela_nombre": "Tomate Sector E",
+      "temperatura": 22.1,
+      "humedad": 53.4,
+      "timestamp": "2026-07-14T21:36:01.161388"
+    },
+    {
+      "id_lectura": 88,
+      "parcela_id": 4,
+      "parcela_nombre": "Maiz Sector D",
+      "temperatura": 27.2,
+      "humedad": 47.3,
+      "timestamp": "2026-07-14T21:36:04.161388"
+    },
+    {
+      "id_lectura": 89,
+      "parcela_id": 2,
+      "parcela_nombre": "Vid Sector B",
+      "temperatura": 27.6,
+      "humedad": 37.7,
+      "timestamp": "2026-07-14T21:36:07.161388"
+    },
+    {
+      "id_lectura": 90,
+      "parcela_id": 3,
+      "parcela_nombre": "Aji Sector C",
+      "temperatura": 35.1,
+      "humedad": 22.3,
+      "timestamp": "2026-07-14T21:36:10.161388"
+    },
+    {
+      "id_lectura": 91,
+      "parcela_id": 2,
+      "parcela_nombre": "Vid Sector B",
+      "temperatura": 15.2,
+      "humedad": 45.8,
+      "timestamp": "2026-07-14T21:36:13.161388"
+    },
+    {
+      "id_lectura": 92,
+      "parcela_id": 2,
+      "parcela_nombre": "Vid Sector B",
+      "temperatura": 18.2,
+      "humedad": 35.3,
+      "timestamp": "2026-07-14T21:36:16.161388"
+    },
+    {
+      "id_lectura": 93,
+      "parcela_id": 2,
+      "parcela_nombre": "Vid Sector B",
+      "temperatura": 31.8,
+      "humedad": 14.2,
+      "timestamp": "2026-07-14T21:36:19.161388"
+    },
+    {
+      "id_lectura": 94,
+      "parcela_id": 2,
+      "parcela_nombre": "Vid Sector B",
+      "temperatura": 24.0,
+      "humedad": 53.5,
+      "timestamp": "2026-07-14T21:36:22.161388"
+    },
+    {
+      "id_lectura": 95,
+      "parcela_id": 5,
+      "parcela_nombre": "Tomate Sector E",
+      "temperatura": 15.5,
+      "humedad": 55.9,
+      "timestamp": "2026-07-14T21:36:25.161388"
+    },
+    {
+      "id_lectura": 96,
+      "parcela_id": 2,
+      "parcela_nombre": "Vid Sector B",
+      "temperatura": 16.1,
+      "humedad": 50.9,
+      "timestamp": "2026-07-14T21:36:28.161388"
+    },
+    {
+      "id_lectura": 97,
+      "parcela_id": 2,
+      "parcela_nombre": "Vid Sector B",
+      "temperatura": 37.5,
+      "humedad": 21.3,
+      "timestamp": "2026-07-14T21:36:31.161388"
+    },
+    {
+      "id_lectura": 98,
+      "parcela_id": 4,
+      "parcela_nombre": "Maiz Sector D",
+      "temperatura": 20.6,
+      "humedad": 48.8,
+      "timestamp": "2026-07-14T21:36:34.161388"
+    },
+    {
+      "id_lectura": 99,
+      "parcela_id": 3,
+      "parcela_nombre": "Aji Sector C",
+      "temperatura": 30.5,
+      "humedad": 22.4,
+      "timestamp": "2026-07-14T21:36:37.161388"
+    },
+    {
+      "id_lectura": 100,
+      "parcela_id": 4,
+      "parcela_nombre": "Maiz Sector D",
+      "temperatura": 18.5,
+      "humedad": 52.5,
+      "timestamp": "2026-07-14T21:36:40.161388"
+    }
+  ]
+}

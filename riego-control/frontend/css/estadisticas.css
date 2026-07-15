@@ -1,0 +1,102 @@
+/* ============================================
+   ESTADÍSTICAS - ESTILOS ESPECÍFICOS
+   ============================================ */
+
+.stats-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 24px;
+}
+
+.chart-bars {
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-around;
+    height: 160px;
+    padding-top: 20px;
+}
+
+.chart-bar {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+    flex: 1;
+}
+
+.chart-bar .bar {
+    width: 48px;
+    border-radius: 6px 6px 0 0;
+    min-height: 8px;
+    transition: height 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.chart-bar .bar.critico { background: var(--danger); }
+.chart-bar .bar.alerta { background: var(--warning); }
+.chart-bar .bar.optimo { background: var(--success); }
+
+.chart-bar .label {
+    font-size: 12px;
+    color: var(--text-secondary);
+    font-weight: 500;
+}
+
+.chart-bar .label strong {
+    color: var(--text-primary);
+    font-weight: 700;
+}
+
+.summary-list {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.summary-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 16px;
+    background: var(--bg-primary);
+    border-radius: var(--radius-sm);
+    font-size: 14px;
+    transition: var(--transition);
+}
+
+.summary-item:hover {
+    background: var(--bg-hover);
+}
+
+.summary-item .key {
+    color: var(--text-secondary);
+    font-weight: 500;
+}
+
+.summary-item .value {
+    font-weight: 700;
+    color: var(--text-primary);
+}
+
+.summary-item .value.danger { color: var(--danger); }
+.summary-item .value.warning { color: var(--warning); }
+.summary-item .value.success { color: var(--success); }
+
+.summary-item.highlight {
+    border-left: 4px solid var(--danger);
+    background: var(--danger-bg);
+}
+
+@media (max-width: 992px) {
+    .stats-grid {
+        grid-template-columns: 1fr;
+    }
+}
+
+@media (max-width: 768px) {
+    .chart-bars {
+        height: 120px;
+    }
+    .chart-bar .bar {
+        width: 32px;
+    }
+}
