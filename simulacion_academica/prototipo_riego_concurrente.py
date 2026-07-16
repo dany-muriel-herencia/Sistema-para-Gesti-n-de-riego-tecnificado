@@ -236,9 +236,14 @@ class MonitorConcurrencia(threading.Thread):
         while simulacion_activa:
             time.sleep(1)
             estado = {
+                "fuente_datos": "MySQL (Laragon) - Tabla sensores y parcelas",
+                "base_de_datos": DB_CONFIG['database'],
                 "semaforo_en_uso": semaforo_hidrantes.en_uso,
                 "semaforo_limite": semaforo_hidrantes.limite,
                 "cola_espera": cola_riego.qsize(),
+                "items_en_cola": list(cola_riego.queue),
+                "hilos_productores": 5,
+                "hilos_consumidores": 3,
                 "timestamp": int(time.time())
             }
             try:
@@ -271,43 +276,46 @@ class ProductorSensores(threading.Thread):
         while simulacion_activa:
             time.sleep(random.uniform(0.5, 1.5))  # Produce rapido para saturar
 
-            cursor.execute("SELECT id, nombre FROM parcelas WHERE estado = 'activa'")
-            parcelas = cursor.fetchall()
+            try:
+                cursor.execute("SELECT id, nombre FROM parcelas WHERE estado = 'activa'")
+                parcelas = cursor.fetchall()
 
-            for parcela in parcelas:
-                if not simulacion_activa:
-                    break
+                for parcela in parcelas:
+                    if not simulacion_activa:
+                        break
 
-                # Consultar lectura real de sensores fisicos desde MySQL
-                cursor.execute(
-                    "SELECT humedad, temperatura FROM sensores "
-                    "WHERE parcela_id = %s ORDER BY fecha_medicion DESC LIMIT 1",
-                    (parcela['id'],)
-                )
-                sensor_data = cursor.fetchone()
+                    # Consultar lectura real de sensores fisicos desde MySQL
+                    cursor.execute(
+                        "SELECT humedad, temperatura FROM sensores "
+                        "WHERE parcela_id = %s ORDER BY fecha_medicion DESC LIMIT 1",
+                        (parcela['id'],)
+                    )
+                    sensor_data = cursor.fetchone()
 
-                if sensor_data:
-                    humedad = float(sensor_data['humedad'])
-                    temperatura = float(sensor_data['temperatura'])
-                else:
-                    # Valores por defecto sin estres si no hay sensores
-                    humedad = 60.0
-                    temperatura = 25.0
+                    if sensor_data:
+                        humedad = float(sensor_data['humedad'])
+                        temperatura = float(sensor_data['temperatura'])
+                    else:
+                        # Valores por defecto sin estres si no hay sensores
+                        humedad = 60.0
+                        temperatura = 25.0
 
-                # Algoritmo de estres hidrico
-                if humedad < 30.0 or temperatura > 35.0:
-                    item_riego = {
-                        'parcela_id': parcela['id'],
-                        'nombre': parcela['nombre']
-                    }
+                    # Algoritmo de estres hidrico
+                    if humedad < 30.0 or temperatura > 35.0:
+                        item_riego = {
+                            'parcela_id': parcela['id'],
+                            'nombre': parcela['nombre']
+                        }
 
-                    # SECCION CRITICA: Insertar en el MONITOR (cola compartida)
-                    try:
-                        cola_riego.put(item_riego, timeout=0.5)
-                        print(f"[PRODUCTOR {self.id_productor}] Sequia en '{parcela['nombre']}' -> ENCOLADA (Cola: {cola_riego.qsize()}/{CAPACIDAD_MAXIMA_COLA})")
-                    except queue.Full:
-                        # El MONITOR bloquea al productor: cola llena
-                        print(f"[MONITOR BLOQUEADO] Cola llena ({CAPACIDAD_MAXIMA_COLA}/{CAPACIDAD_MAXIMA_COLA}). PRODUCTOR {self.id_productor} pausado.")
+                        # SECCION CRITICA: Insertar en el MONITOR (cola compartida)
+                        try:
+                            cola_riego.put(item_riego, timeout=0.5)
+                            print(f"[PRODUCTOR {self.id_productor}] Sequia en '{parcela['nombre']}' -> ENCOLADA (Cola: {cola_riego.qsize()}/{CAPACIDAD_MAXIMA_COLA})")
+                        except queue.Full:
+                            # El MONITOR bloquea al productor: cola llena
+                            print(f"[MONITOR BLOQUEADO] Cola llena ({CAPACIDAD_MAXIMA_COLA}/{CAPACIDAD_MAXIMA_COLA}). PRODUCTOR {self.id_productor} pausado.")
+            except mysql.connector.Error as err:
+                print(f"[PRODUCTOR {self.id_productor}] ERROR DE BASE DE DATOS: {err}")
 
         cursor.close()
         db.close()
@@ -351,19 +359,37 @@ class ConsumidorRiego(threading.Thread):
 
             limite_actual = semaforo_hidrantes.limite
             en_uso_actual = semaforo_hidrantes.en_uso
-            print(f"[SEMAFORO] Hidrante asignado a '{parcela_nombre}'. En uso: {en_uso_actual}/{limite_actual}")
+            print(f"[SEMAFORO] Cupo asignado a '{parcela_nombre}'. En uso: {en_uso_actual}/{limite_actual}")
 
             try:
+                # 1. Obtener un hidrante real disponible
+                # Estrategia: ORDER BY RAND() para balancear la carga aleatoriamente entre
+                # todos los hidrantes disponibles, evitando castigar siempre al primero (id=1).
+                cursor.execute("SELECT id FROM hidrantes WHERE estado = 'disponible' ORDER BY RAND() LIMIT 1")
+                row = cursor.fetchone()
+
+                if not row:
+                    # CASO BORDE: Hay cupo en el semáforo pero no hidrantes físicos disponibles
+                    # (ej. administrador los puso en 'mantenimiento' justo ahora).
+                    # Decisión: Descartamos el turno sin crashear.
+                    # Justificación: Como el ProductorSensores corre constantemente, si la sequía
+                    # persiste, volverá a encolar la parcela en su próxima vuelta. Retornarlo a 
+                    # la cola directamente aquí podría generar un loop infinito bloqueando el consumidor.
+                    print(f"[CONSUMIDOR {self.id_consumidor}] ALERTA: No hay hidrantes fisicos disponibles. Descartando riego de '{parcela_nombre}'.")
+                    continue
+
+                hidrante_id_real = row[0]
+
                 # Registrar en DB que empezo el riego
                 inicio = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
                 sql_insert = "INSERT INTO turnos_riego (parcela_id, hidrante_id, inicio, estado) VALUES (%s, %s, %s, %s)"
-                cursor.execute(sql_insert, (parcela_id, self.id_consumidor, inicio, 'regando'))
+                cursor.execute(sql_insert, (parcela_id, hidrante_id_real, inicio, 'regando'))
                 db.commit()
                 turno_id = cursor.lastrowid
 
                 # Simular tiempo de riego (lento para saturar la cola)
                 tiempo_riego = random.uniform(8.0, 12.0)
-                print(f"[CONSUMIDOR {self.id_consumidor}] Regando '{parcela_nombre}' por {tiempo_riego:.1f}s...")
+                print(f"[CONSUMIDOR {self.id_consumidor}] Regando '{parcela_nombre}' usando hidrante real ID {hidrante_id_real} por {tiempo_riego:.1f}s...")
                 time.sleep(tiempo_riego)
 
                 # Actualizar DB: riego completado
@@ -374,8 +400,12 @@ class ConsumidorRiego(threading.Thread):
 
                 print(f"[CONSUMIDOR {self.id_consumidor}] Riego COMPLETADO en '{parcela_nombre}'. Turno #{turno_id} guardado en DB.")
 
+            except mysql.connector.Error as err:
+                print(f"[CONSUMIDOR {self.id_consumidor}] ERROR DE BASE DE DATOS: {err}")
+                # No lanzamos la excepcion para no matar el hilo; el bucle continuara
             finally:
-                # Liberar SEMAFORO DINAMICO
+                # Liberar SEMAFORO DINAMICO y la tarea de la cola,
+                # SIEMPRE se ejecuta incluso si hay excepcion SQL o si descartamos por falta de hidrantes
                 semaforo_hidrantes.release()
                 print(f"[SEMAFORO] Hidrante liberado de '{parcela_nombre}'. En uso ahora: {semaforo_hidrantes.en_uso}/{semaforo_hidrantes.limite}")
                 cola_riego.task_done()

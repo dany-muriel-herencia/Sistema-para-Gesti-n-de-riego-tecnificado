@@ -1,1 +1,1 @@
-{"semaforo_en_uso": 3, "semaforo_limite": 20, "cola_espera": 2, "timestamp": 1784165185}
+{"fuente_datos": "MySQL (Laragon) - Tabla sensores y parcelas", "base_de_datos": "sistema_riego", "semaforo_en_uso": 3, "semaforo_limite": 4, "cola_espera": 2, "items_en_cola": [{"parcela_id": 13, "nombre": "Parcela Test Demo"}, {"parcela_id": 1, "nombre": "Olivos Sector A"}], "hilos_productores": 5, "hilos_consumidores": 3, "timestamp": 1784166347}
