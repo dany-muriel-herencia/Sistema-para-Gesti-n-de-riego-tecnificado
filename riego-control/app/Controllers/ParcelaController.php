@@ -1,6 +1,7 @@
 <?php
 
 require_once __DIR__ . '/../Models/Parcela.php';
+require_once __DIR__ . '/../Models/Sensor.php';
 
 class ParcelaController
 {
@@ -24,6 +25,13 @@ class ParcelaController
             return ['error' => 'No se pudo crear la parcela.'];
         }
 
+        if (isset($data['humedad']) || isset($data['temperatura'])) {
+            $humedad = isset($data['humedad']) ? (float)$data['humedad'] : 60.0;
+            $temperatura = isset($data['temperatura']) ? (float)$data['temperatura'] : 25.0;
+            $sensor = new Sensor(null, $parcela->getId(), $temperatura, $humedad, date('Y-m-d H:i:s'));
+            $sensor->save();
+        }
+
         return $parcela->toArray();
     }
 
@@ -41,6 +49,15 @@ class ParcelaController
 
         if (!$parcela->save()) {
             return ['error' => 'No se pudo actualizar la parcela.'];
+        }
+
+        if (isset($data['humedad']) || isset($data['temperatura'])) {
+            $ultimoSensor = Sensor::findByParcelaId($parcela->getId());
+            $humedad = isset($data['humedad']) ? (float)$data['humedad'] : (!empty($ultimoSensor) ? $ultimoSensor[0]->getHumedad() : 60.0);
+            $temperatura = isset($data['temperatura']) ? (float)$data['temperatura'] : (!empty($ultimoSensor) ? $ultimoSensor[0]->getTemperatura() : 25.0);
+            
+            $sensor = new Sensor(null, $parcela->getId(), $temperatura, $humedad, date('Y-m-d H:i:s'));
+            $sensor->save();
         }
 
         return $parcela->toArray();

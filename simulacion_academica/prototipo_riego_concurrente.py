@@ -4,6 +4,8 @@ import random
 import queue
 import mysql.connector
 from datetime import datetime
+import json
+import os
 
 # ============================================================================
 # PROTOTIPO ACADEMICO: SISTEMA DE GESTION DE RIEGO (CONCURRENCIA)
@@ -23,6 +25,9 @@ DB_CONFIG = {
 # ===========================================================================
 # VARIABLES GLOBALES COMPARTIDAS ENTRE HILOS
 # ===========================================================================
+
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+JSON_PATH = os.path.join(BASE_DIR, '..', 'riego-control', 'backend', 'api', 'estado_concurrencia.json')
 
 # 1. MONITOR: Cola con capacidad maxima (simula el buffer compartido)
 #    Para la prueba de carga extrema cambiar a 2
@@ -219,6 +224,33 @@ class MonitorHidrantes(threading.Thread):
 
 
 # ===========================================================================
+# HILO MONITOR DE CONCURRENCIA (EXPORTA ESTADO A JSON PARA FRONTEND)
+# ===========================================================================
+class MonitorConcurrencia(threading.Thread):
+    def __init__(self):
+        super().__init__(daemon=True)
+        self.name = "MonitorConcurrencia"
+
+    def run(self):
+        global simulacion_activa
+        while simulacion_activa:
+            time.sleep(1)
+            estado = {
+                "semaforo_en_uso": semaforo_hidrantes.en_uso,
+                "semaforo_limite": semaforo_hidrantes.limite,
+                "cola_espera": cola_riego.qsize(),
+                "timestamp": int(time.time())
+            }
+            try:
+                # Ensure directory exists just in case
+                os.makedirs(os.path.dirname(JSON_PATH), exist_ok=True)
+                with open(JSON_PATH, 'w') as f:
+                    json.dump(estado, f)
+            except Exception as e:
+                print(f"[ERROR JSON] No se pudo escribir {JSON_PATH}: {e}")
+
+
+# ===========================================================================
 # CLASE PRODUCTOR (Lee parcelas de MySQL y evalua estres hidrico)
 # ===========================================================================
 class ProductorSensores(threading.Thread):
@@ -246,10 +278,21 @@ class ProductorSensores(threading.Thread):
                 if not simulacion_activa:
                     break
 
-                # Simular lectura de sensores fisicos
-                # Para prueba extrema: forzar sequia en todas las parcelas
-                humedad = 10.0      # Humedad critica forzada
-                temperatura = 40.0  # Temperatura critica forzada
+                # Consultar lectura real de sensores fisicos desde MySQL
+                cursor.execute(
+                    "SELECT humedad, temperatura FROM sensores "
+                    "WHERE parcela_id = %s ORDER BY fecha_medicion DESC LIMIT 1",
+                    (parcela['id'],)
+                )
+                sensor_data = cursor.fetchone()
+
+                if sensor_data:
+                    humedad = float(sensor_data['humedad'])
+                    temperatura = float(sensor_data['temperatura'])
+                else:
+                    # Valores por defecto sin estres si no hay sensores
+                    humedad = 60.0
+                    temperatura = 25.0
 
                 # Algoritmo de estres hidrico
                 if humedad < 30.0 or temperatura > 35.0:
@@ -354,6 +397,10 @@ def principal():
     # Hilo monitor de hidrantes: actualiza el semaforo cada 10 segundos
     monitor = MonitorHidrantes()
     monitor.start()
+
+    # Hilo monitor de concurrencia: exporta estado a JSON cada 1 segundo
+    monitor_conc = MonitorConcurrencia()
+    monitor_conc.start()
 
     # 5 Productores para saturar rapido la cola de 2 espacios
     productores = [ProductorSensores(i) for i in range(1, 6)]

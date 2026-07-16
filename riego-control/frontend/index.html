@@ -1,674 +1,453 @@
 <!DOCTYPE html>
-<html lang="es">
+<html class="light" lang="es">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>🌾 Centro de Control - La Yarada</title>
-    
-    <!-- Fuentes -->
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet">
-    
-    <!-- CSS Modular -->
-    <link rel="stylesheet" href="css/styles.css">
-    <link rel="stylesheet" href="css/metrics.css">
-    <link rel="stylesheet" href="css/topbar.css">
-    <link rel="stylesheet" href="css/tabs.css">
-    <link rel="stylesheet" href="css/dashboard.css">
-    <link rel="stylesheet" href="css/hidrantes.css">
-    <link rel="stylesheet" href="css/turnos.css">
-    <link rel="stylesheet" href="css/consola.css">
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>HydroControl - Centro de Control de Riego Inteligente</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;family=Geist:wght@400;500&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+
+<!-- Design System Implementation -->
+<script id="tailwind-config">
+tailwind.config = {
+    darkMode: "class",
+    theme: {
+        extend: {
+            "colors": {
+                "surface-container": "#eceef0",
+                "surface-tint": "#3b6934",
+                "surface-container-high": "#e6e8ea",
+                "tertiary": "#00440e",
+                "on-secondary": "#ffffff",
+                "on-primary-fixed": "#002201",
+                "on-primary": "#ffffff",
+                "secondary-fixed": "#d1e4ff",
+                "on-tertiary-fixed": "#002204",
+                "surface-container-lowest": "#ffffff",
+                "on-secondary-container": "#00355c",
+                "primary-fixed": "#bcf0ae",
+                "surface-container-highest": "#e0e3e5",
+                "on-surface-variant": "#42493e",
+                "error-container": "#ffdad6",
+                "tertiary-fixed": "#94f990",
+                "secondary-fixed-dim": "#9ecaff",
+                "surface-dim": "#d8dadc",
+                "on-background": "#191c1e",
+                "outline-variant": "#c2c9bb",
+                "on-tertiary-fixed-variant": "#005313",
+                "background": "#f8f9fb",
+                "on-error": "#ffffff",
+                "primary": "#154212",
+                "on-tertiary": "#ffffff",
+                "on-error-container": "#93000a",
+                "inverse-primary": "#a1d494",
+                "on-secondary-fixed-variant": "#00497d",
+                "inverse-surface": "#2d3133",
+                "tertiary-container": "#005e17",
+                "secondary-container": "#33a0fd",
+                "on-secondary-fixed": "#001d36",
+                "on-primary-container": "#9dd090",
+                "secondary": "#0061a4",
+                "surface-variant": "#e0e3e5",
+                "surface": "#f8f9fb",
+                "surface-bright": "#f8f9fb",
+                "inverse-on-surface": "#eff1f3",
+                "on-primary-fixed-variant": "#23501e",
+                "primary-fixed-dim": "#a1d494",
+                "primary-container": "#2d5a27",
+                "error": "#ba1a1a",
+                "on-tertiary-container": "#75d974",
+                "on-surface": "#191c1e",
+                "outline": "#72796e",
+                "tertiary-fixed-dim": "#78dc77",
+                "surface-container-low": "#f2f4f6"
+            },
+            "borderRadius": {
+                "DEFAULT": "0.25rem",
+                "lg": "0.5rem",
+                "xl": "0.75rem",
+                "full": "9999px"
+            },
+            "spacing": {
+                "gutter": "24px",
+                "base": "4px",
+                "topbar_height": "64px",
+                "margin": "32px",
+                "sidebar_width": "260px"
+            },
+            "fontFamily": {
+                "label-xs": ["Inter"],
+                "code-sm": ["Geist"],
+                "headline-md": ["Inter"],
+                "title-sm": ["Inter"],
+                "display-lg": ["Inter"],
+                "body-sm": ["Inter"],
+                "body-md": ["Inter"]
+            },
+            "fontSize": {
+                "label-xs": ["12px", { "lineHeight": "16px", "letterSpacing": "0.05em", "fontWeight": "600" }],
+                "code-sm": ["13px", { "lineHeight": "18px", "fontWeight": "500" }],
+                "headline-md": ["24px", { "lineHeight": "32px", "letterSpacing": "-0.01em", "fontWeight": "600" }],
+                "title-sm": ["18px", { "lineHeight": "24px", "fontWeight": "600" }],
+                "display-lg": ["32px", { "lineHeight": "40px", "letterSpacing": "-0.02em", "fontWeight": "700" }],
+                "body-sm": ["14px", { "lineHeight": "20px", "fontWeight": "400" }],
+                "body-md": ["16px", { "lineHeight": "24px", "fontWeight": "400" }]
+            }
+        },
+    },
+}
+</script>
+<style>
+body {
+    background-color: #f8f9fb;
+    font-family: 'Inter', sans-serif;
+    overflow: hidden;
+}
+.custom-scrollbar::-webkit-scrollbar {
+    width: 6px;
+}
+.custom-scrollbar::-webkit-scrollbar-track {
+    background: transparent;
+}
+.custom-scrollbar::-webkit-scrollbar-thumb {
+    background: #c2c9bb;
+    border-radius: 10px;
+}
+.grid-mesh {
+    background-image: radial-gradient(#c2c9bb 0.5px, transparent 0.5px);
+    background-size: 24px 24px;
+}
+.terminal-glow {
+    text-shadow: 0 0 5px rgba(117, 217, 116, 0.4);
+}
+.status-pulse {
+    animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+}
+@keyframes pulse {
+    0%, 100% { opacity: 1; }
+    50% { opacity: .5; }
+}
+</style>
 </head>
-<body>
-
-<!-- LOADING OVERLAY - Se oculta con JS al terminar init() -->
-<div class="loading-overlay" id="loadingOverlay" style="opacity:1;visibility:visible;display:flex;">
-    <div class="loading-spinner"></div>
-    <div class="loading-text">🌾 Cargando La Yarada...</div>
-    <div class="loading-subtext" id="loadingStatus">Conectando con la base de datos...</div>
-</div>
-
-<!-- TOPBAR -->
-<header class="topbar" id="topbar">
-    <div class="topbar-left">
-        <div class="logo-icon">
-            <span class="material-symbols-outlined">sensors</span>
-        </div>
-        <div class="brand">
-            <h1>Control de Riego</h1>
-            <div class="subtitle">🌾 La Yarada, Tacna</div>
-        </div>
+<body class="flex h-screen text-on-surface">
+<!-- NAVIGATION DRAWER (Sidebar) -->
+<aside class="w-sidebar_width h-full fixed left-0 top-0 bg-surface border-r border-outline-variant flex flex-col py-margin gap-base shadow-lg z-50">
+    <div class="px-6 mb-8 flex items-center gap-3">
+        <span class="material-symbols-outlined text-primary text-headline-md" style="font-variation-settings: 'FILL' 1;">sensors</span>
+        <h1 class="text-headline-md font-headline-md text-primary tracking-tight">HydroControl</h1>
     </div>
-    <div class="topbar-right">
-        <div class="status-badge">
-            <span class="status-dot"></span>
-            <span>Sistema Activo</span>
-        </div>
-        <div class="clock">
-            <span class="material-symbols-outlined">schedule</span>
-            <span id="reloj">--:--:--</span>
-        </div>
-        <span id="dbStatus" class="db-status connecting">⏳ Conectando...</span>
-        <span id="pyStatus" class="db-status" style="margin-left:8px;font-size:11px;padding:3px 8px;border-radius:12px;background:rgba(88,166,255,0.1);color:#58a6ff;border:1px solid rgba(88,166,255,0.3);display:none;">🐍 Python: --</span>
-    </div>
-</header>
-
-<!-- CONTENIDO PRINCIPAL -->
-<main class="main-content">
-
-    <!-- NAVEGACIÓN POR PESTAÑAS -->
-    <nav class="tabs-nav" id="tabsNav">
-        <button class="tab-btn active" data-tab="dashboard">
+    <nav class="flex-1 px-4 space-y-1">
+        <!-- Dashboard Active -->
+        <a class="flex items-center gap-3 px-4 py-3 bg-primary-container text-on-primary-container font-bold rounded-lg transition-all" href="#">
             <span class="material-symbols-outlined">dashboard</span>
-            <span>Dashboard</span>
-        </button>
-        <button class="tab-btn" data-tab="hidrantes">
-            <span class="material-symbols-outlined">water_damage</span>
-            <span>Hidrantes</span>
-            <span class="tab-badge" id="hidrantesBadge">3</span>
-        </button>
-        <button class="tab-btn" data-tab="turnos">
-            <span class="material-symbols-outlined">calendar_today</span>
-            <span>Turnos</span>
-            <span class="tab-badge" id="turnosBadge">4</span>
-        </button>
-        <button class="tab-btn" data-tab="consola">
+            <span class="font-body-md text-body-md">Dashboard</span>
+        </a>
+        <a class="flex items-center gap-3 px-4 py-3 text-on-surface-variant hover:bg-surface-container-high rounded-lg transition-all" href="#">
+            <span class="material-symbols-outlined">grid_view</span>
+            <span class="font-body-md text-body-md">Parcelas</span>
+        </a>
+        <a class="flex items-center gap-3 px-4 py-3 text-on-surface-variant hover:bg-surface-container-high rounded-lg transition-all" href="#">
+            <span class="material-symbols-outlined">sensors</span>
+            <span class="font-body-md text-body-md">Sensores</span>
+        </a>
+        <a class="flex items-center gap-3 px-4 py-3 text-on-surface-variant hover:bg-surface-container-high rounded-lg transition-all" href="#">
+            <span class="material-symbols-outlined">opacity</span>
+            <span class="font-body-md text-body-md">Riego</span>
+        </a>
+        <a class="flex items-center gap-3 px-4 py-3 text-on-surface-variant hover:bg-surface-container-high rounded-lg transition-all" href="#">
+            <span class="material-symbols-outlined">monitoring</span>
+            <span class="font-body-md text-body-md">Monitor</span>
+        </a>
+        <a class="flex items-center gap-3 px-4 py-3 text-on-surface-variant hover:bg-surface-container-high rounded-lg transition-all" href="#">
             <span class="material-symbols-outlined">terminal</span>
-            <span>Consola</span>
-            <span class="tab-badge" id="consolaBadge">0</span>
-        </button>
+            <span class="font-body-md text-body-md">Consola</span>
+        </a>
+        <a class="flex items-center gap-3 px-4 py-3 text-on-surface-variant hover:bg-surface-container-high rounded-lg transition-all" href="#">
+            <span class="material-symbols-outlined">settings</span>
+            <span class="font-body-md text-body-md">Configuración</span>
+        </a>
     </nav>
-
-    <!-- ========================================== -->
-    <!-- PÁGINA: DASHBOARD -->
-    <!-- ========================================== -->
-    <div id="page-dashboard" class="page-content active">
-        
-        <!-- Controles rápidos -->
-        <div class="controls-bar">
-            <span class="label">🎮 Control:</span>
-            <button class="btn btn-primary" onclick="generarEvento()">📌 Evento</button>
-            <button class="btn btn-warning" onclick="cambiarHumedad()">💧 Humedad</button>
-            <button class="btn btn-info" onclick="toggleHidrante()">🚿 Hidrante</button>
-            <button class="btn btn-success" onclick="agregarParcela()">🌱 Parcela</button>
-            <button class="btn btn-danger" onclick="resetearDatos()">🔄 Reset</button>
-            <button class="btn btn-outline" onclick="recargarDatos()">🔄 Recargar</button>
-            <span class="timer">⏱️ <span class="time" id="timerDisplay">00:00</span></span>
-        </div>
-
-        <!-- Métricas -->
-        <div class="metrics-grid">
-            <div class="metric-card primary">
-                <div class="header">
-                    <span class="label">Parcelas</span>
-                    <div class="icon-wrapper">
-                        <span class="material-symbols-outlined">potted_plant</span>
-                    </div>
-                </div>
-                <div class="value primary" id="totalParcelas">0</div>
-                <div class="sub">🌱 Monitoreadas</div>
-                <div class="trend up">▲ 12% esta semana</div>
-            </div>
-
-            <div class="metric-card warning">
-                <div class="header">
-                    <span class="label">Alerta</span>
-                    <div class="icon-wrapper">
-                        <span class="material-symbols-outlined">warning</span>
-                    </div>
-                </div>
-                <div class="value warning" id="alertasCount">0</div>
-                <div class="sub">⚠️ Requieren atención</div>
-                <div class="trend stable">● Sin cambios</div>
-            </div>
-
-            <div class="metric-card danger">
-                <div class="header">
-                    <span class="label">Crítico</span>
-                    <div class="icon-wrapper">
-                        <span class="material-symbols-outlined">error</span>
-                    </div>
-                </div>
-                <div class="value error" id="criticosCount">0</div>
-                <div class="sub">🚨 ¡Acción urgente!</div>
-                <div class="trend down">▼ 3% esta semana</div>
-            </div>
-
-            <div class="metric-card success">
-                <div class="header">
-                    <span class="label">Hidrantes</span>
-                    <div class="icon-wrapper">
-                        <span class="material-symbols-outlined">valve</span>
-                    </div>
-                </div>
-                <div class="value success" id="hidrantesCount">0 <span class="small">/0</span></div>
-                <div class="sub">🚿 Disponibles</div>
-                <div class="trend up">▲ 2 disponibles</div>
-            </div>
-
-            <div class="metric-card info">
-                <div class="header">
-                    <span class="label">Humedad</span>
-                    <div class="icon-wrapper">
-                        <span class="material-symbols-outlined">humidity_mid</span>
-                    </div>
-                </div>
-                <div class="value info" id="humedadMedia">0%</div>
-                <div class="sub">💧 Promedio</div>
-                <div class="trend down">▼ 5% esta semana</div>
-            </div>
-
-            <div class="metric-card danger">
-                <div class="header">
-                    <span class="label">Temperatura</span>
-                    <div class="icon-wrapper">
-                        <span class="material-symbols-outlined">device_thermostat</span>
-                    </div>
-                </div>
-                <div class="value" id="tempPromedio">0 <span class="small">°C</span></div>
-                <div class="sub">🌡️ Promedio</div>
-                <div class="trend up">▲ 2°C esta semana</div>
-            </div>
-        </div>
-
-        <!-- Mapa de calor -->
-        <div class="panel">
-            <div class="panel-header">
-                <div class="title">
-                    <span class="material-symbols-outlined">grid_view</span>
-                    <h2>🗺️ Mapa de Estrés Hídrico</h2>
-                    <div class="badge-group">
-                        <span class="badge"><span class="dot dot-green"></span> Óptimo</span>
-                        <span class="badge"><span class="dot dot-yellow"></span> Alerta</span>
-                        <span class="badge"><span class="dot dot-red"></span> Crítico</span>
-                    </div>
-                </div>
-                <span class="info-text" id="updateTime">Actualizado: ahora</span>
-            </div>
-            <div class="panel-body">
-                <div class="heatmap-grid" id="heatmapContainer">
-                    <!-- Renderizado por JS -->
-                </div>
-            </div>
-        </div>
-
-        <!-- Consola de Eventos -->
-        <div class="panel">
-            <div class="panel-header">
-                <div class="title">
-                    <span class="material-symbols-outlined">terminal</span>
-                    <h2>📡 Consola de Eventos</h2>
-                </div>
-                <div class="console-controls">
-                    <span class="counter" id="eventCounter">0 eventos</span>
-                    <button class="btn-sm" onclick="limpiarConsola()">Limpiar</button>
-                    <button class="btn-sm" id="pauseBtn" onclick="togglePausa()">⏸️ Pausar</button>
-                </div>
-            </div>
-            <div class="console-output" id="consoleOutput">
-                <!-- Renderizado por JS -->
+    <div class="px-6 pt-4 border-t border-outline-variant mt-auto">
+        <div class="flex items-center gap-3 p-2 rounded-xl bg-surface-container-low">
+            <div class="w-10 h-10 rounded-full bg-secondary-fixed flex items-center justify-center text-on-secondary-container font-bold">JD</div>
+            <div class="flex flex-col">
+                <span class="text-label-xs font-label-xs text-on-surface">Javier Domínguez</span>
+                <span class="text-[10px] text-on-surface-variant uppercase tracking-wider">Ingeniero Jefe</span>
             </div>
         </div>
     </div>
+</aside>
 
-    <!-- ========================================== -->
-    <!-- PÁGINA: HIDRANTES -->
-    <!-- ========================================== -->
-    <div id="page-hidrantes" class="page-content" style="display:none;">
-        <div class="panel">
-            <div class="panel-header">
-                <div class="title">
-                    <span class="material-symbols-outlined">water_damage</span>
-                    <h2>🚿 Gestión de Hidrantes</h2>
-                </div>
-                <span class="info-text" id="hidrantesStatus">0 disponibles</span>
+<!-- MAIN CONTENT AREA -->
+<main class="flex-1 ml-[260px] flex flex-col h-full bg-background overflow-hidden">
+    <!-- TOP APP BAR -->
+    <header class="h-topbar_height w-full bg-surface border-b border-outline-variant flex justify-between items-center px-gutter shrink-0 z-40">
+        <div class="flex items-center gap-6">
+            <h2 class="text-title-sm font-title-sm font-bold text-primary">Centro de Control de Riego Inteligente</h2>
+            <div class="h-8 w-px bg-outline-variant"></div>
+            <div class="flex items-center gap-2 text-on-surface-variant">
+                <span class="material-symbols-outlined text-[18px]">schedule</span>
+                <span class="text-label-xs font-label-xs tabular-nums" id="real-time-clock">--:--:--</span>
             </div>
-            <div class="panel-body">
-                <div id="hidrantesContainer">
-                    <!-- Renderizado por JS -->
+        </div>
+        <div class="flex items-center gap-6">
+            <div class="flex items-center gap-2 px-3 py-1 bg-tertiary-container/10 rounded-full border border-tertiary/20">
+                <span class="w-2 h-2 rounded-full bg-tertiary status-pulse"></span>
+                <span class="text-label-xs font-label-xs text-tertiary uppercase">Sistema Nominal</span>
+            </div>
+            <div class="flex items-center gap-3">
+                <span class="material-symbols-outlined text-on-surface-variant cursor-pointer hover:text-primary transition-colors">wifi</span>
+                <span class="material-symbols-outlined text-on-surface-variant cursor-pointer hover:text-primary transition-colors">notifications</span>
+                <div class="w-8 h-8 rounded-full overflow-hidden border border-outline bg-primary flex items-center justify-center text-white">
+                    JD
                 </div>
             </div>
+        </div>
+    </header>
+
+    <!-- DASHBOARD SCROLLABLE BODY -->
+    <div class="flex-1 overflow-y-auto custom-scrollbar p-gutter space-y-gutter pb-32">
+        <!-- KEY METRIC CARDS -->
+        <div class="grid grid-cols-6 gap-6">
+            <!-- Card 1 -->
+            <div class="col-span-1 bg-surface rounded-xl border border-outline-variant p-4 shadow-sm hover:shadow-md transition-shadow">
+                <div class="flex justify-between items-start mb-2">
+                    <span class="text-label-xs font-label-xs text-on-surface-variant uppercase">Parcelas Activas</span>
+                    <span class="material-symbols-outlined text-primary">potted_plant</span>
+                </div>
+                <div class="text-display-lg font-display-lg text-primary" id="metric-parcelas">--</div>
+                <div class="text-label-xs font-label-xs text-tertiary flex items-center gap-1">
+                    <span class="material-symbols-outlined text-[14px]">trending_up</span> Monitoreadas
+                </div>
+            </div>
+            <!-- Card 2 -->
+            <div class="col-span-1 bg-surface rounded-xl border border-outline-variant p-4 shadow-sm hover:shadow-md transition-shadow">
+                <div class="flex justify-between items-start mb-2">
+                    <span class="text-label-xs font-label-xs text-on-surface-variant uppercase">Riego en Curso</span>
+                    <span class="material-symbols-outlined text-secondary">water_drop</span>
+                </div>
+                <div class="text-display-lg font-display-lg text-secondary" id="metric-riego">--</div>
+                <div class="text-label-xs font-label-xs text-on-surface-variant">Turnos activos</div>
+            </div>
+            <!-- Card 3 -->
+            <div class="col-span-1 bg-surface rounded-xl border border-outline-variant p-4 shadow-sm hover:shadow-md transition-shadow">
+                <div class="flex justify-between items-start mb-2">
+                    <span class="text-label-xs font-label-xs text-on-surface-variant uppercase">Hidrantes Libres</span>
+                    <span class="material-symbols-outlined text-primary-container">valve</span>
+                </div>
+                <div class="text-display-lg font-display-lg text-on-surface" id="metric-hidrantes">--<span class="text-title-sm text-on-surface-variant">/--</span></div>
+                <div class="text-label-xs font-label-xs text-on-surface-variant">Disponibilidad en tiempo real</div>
+            </div>
+            <!-- Card 4 -->
+            <div class="col-span-1 bg-surface rounded-xl border border-outline-variant p-4 shadow-sm hover:shadow-md transition-shadow">
+                <div class="flex justify-between items-start mb-2">
+                    <span class="text-label-xs font-label-xs text-on-surface-variant uppercase">Humedad Media</span>
+                    <span class="material-symbols-outlined text-on-secondary-container">humidity_mid</span>
+                </div>
+                <div class="text-display-lg font-display-lg text-on-secondary-container" id="metric-humedad">--%</div>
+                <div class="text-label-xs font-label-xs text-on-surface-variant">Datos de sensores</div>
+            </div>
+            <!-- Card 5 -->
+            <div class="col-span-1 bg-surface rounded-xl border border-outline-variant p-4 shadow-sm hover:shadow-md transition-shadow">
+                <div class="flex justify-between items-start mb-2">
+                    <span class="text-label-xs font-label-xs text-on-surface-variant uppercase">Temp. Suelo</span>
+                    <span class="material-symbols-outlined text-error">device_thermostat</span>
+                </div>
+                <div class="text-display-lg font-display-lg text-on-surface" id="metric-temp">--<span class="text-title-sm text-on-surface-variant">°C</span></div>
+                <div class="text-label-xs font-label-xs text-on-surface-variant">Promedio global</div>
+            </div>
+            <!-- Card 6 -->
+            <div class="col-span-1 bg-surface rounded-xl border border-outline-variant p-4 shadow-sm hover:shadow-md transition-shadow">
+                <div class="flex justify-between items-start mb-2">
+                    <span class="text-label-xs font-label-xs text-on-surface-variant uppercase">Consumo Diario</span>
+                    <span class="material-symbols-outlined text-tertiary">show_chart</span>
+                </div>
+                <div class="text-display-lg font-display-lg text-on-surface">N/D</div>
+                <div class="text-label-xs font-label-xs text-on-surface-variant">Sin datos históricos</div>
+            </div>
+        </div>
+
+        <div class="grid grid-cols-12 gap-6 items-start">
+            <!-- CENTRAL SECTION: ESTADO DE PARCELAS -->
+            <section class="col-span-12 lg:col-span-8 space-y-6">
+                <div class="bg-surface rounded-xl border border-outline-variant shadow-sm overflow-hidden flex flex-col">
+                    <div class="p-4 border-b border-outline-variant flex justify-between items-center">
+                        <h3 class="text-title-sm font-title-sm text-on-surface">Estado de Parcelas - Mapa de Humedad</h3>
+                        <div class="flex items-center gap-4">
+                            <button class="px-3 py-1 bg-secondary text-white text-label-xs font-bold rounded-md flex items-center gap-1 hover:bg-secondary/90 transition-colors" onclick="document.getElementById('modal-agregar-parcela').classList.remove('hidden')">
+                                <span class="material-symbols-outlined text-[14px]">add</span> Agregar Parcela
+                            </button>
+                            <div class="flex gap-2">
+                                <span class="flex items-center gap-1 text-label-xs font-label-xs text-on-surface-variant">
+                                    <span class="w-3 h-3 rounded-sm bg-primary/20"></span> Crítico
+                                </span>
+                            <span class="flex items-center gap-1 text-label-xs font-label-xs text-on-surface-variant">
+                                <span class="w-3 h-3 rounded-sm bg-primary/60"></span> Medio
+                            </span>
+                            <span class="flex items-center gap-1 text-label-xs font-label-xs text-on-surface-variant">
+                                <span class="w-3 h-3 rounded-sm bg-primary"></span> Óptimo
+                            </span>
+                        </div>
+                    </div>
+                    <!-- HEATMAP VISUALIZATION CONTAINER -->
+                    <div class="relative w-full h-[480px] bg-surface-container-highest grid-mesh overflow-hidden group">
+                        <!-- Overlay Grid Labels -->
+                        <div id="parcelas-grid" class="absolute inset-0 grid grid-cols-4 grid-rows-3 gap-6 p-10 z-10">
+                            <!-- Dynamic Content Rendered by JS -->
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- RIGHT PANEL: QUEUES & TURNOS -->
+            <aside class="col-span-12 lg:col-span-4 space-y-6">
+                <!-- Cola de Riego -->
+                <div class="bg-surface rounded-xl border border-outline-variant shadow-sm p-4">
+                    <div class="flex items-center gap-2 mb-4">
+                        <span class="material-symbols-outlined text-secondary">reorder</span>
+                        <h3 class="text-label-xs font-label-xs text-on-surface uppercase">Cola de Riego</h3>
+                    </div>
+                    <div class="space-y-3" id="cola-riego-container">
+                        <!-- Dynamic Content Rendered by JS -->
+                    </div>
+                </div>
+
+                <!-- Próximos Turnos -->
+                <div class="bg-surface rounded-xl border border-outline-variant shadow-sm p-4">
+                    <div class="flex items-center gap-2 mb-4">
+                        <span class="material-symbols-outlined text-primary">calendar_today</span>
+                        <h3 class="text-label-xs font-label-xs text-on-surface uppercase">Próximos Turnos</h3>
+                    </div>
+                    <div class="space-y-4" id="proximos-turnos-container">
+                        <!-- Dynamic Content Rendered by JS -->
+                        <div class="text-body-sm text-on-surface-variant italic">Sin turnos programados a futuro.</div>
+                    </div>
+                </div>
+
+                <!-- Hidrantes -->
+                <div class="bg-surface rounded-xl border border-outline-variant shadow-sm p-4">
+                    <div class="flex items-center gap-2 mb-4">
+                        <span class="material-symbols-outlined text-tertiary">water_damage</span>
+                        <h3 class="text-label-xs font-label-xs text-on-surface uppercase">Estado de Hidrantes</h3>
+                    </div>
+                    <div class="grid grid-cols-5 gap-2" id="hidrantes-grid">
+                        <!-- Dynamic Content Rendered by JS -->
+                    </div>
+
+                    <!-- Concurrency State Panel -->
+                    <div class="mt-4 p-3 bg-surface-container-low rounded-lg border border-outline-variant flex items-center justify-between">
+                        <div class="flex items-center gap-2">
+                            <span class="w-2 h-2 rounded-full bg-secondary status-pulse"></span>
+                            <span class="text-[10px] font-bold text-on-surface uppercase tracking-wider">Hilos Python</span>
+                        </div>
+                        <div class="flex items-center gap-3 text-label-xs">
+                            <span id="concurrency-active" class="font-bold text-tertiary">0 Activos</span>
+                            <span class="text-on-surface-variant">|</span>
+                            <span id="concurrency-waiting" class="font-bold text-error">0 En Espera</span>
+                        </div>
+                    </div>
+
+                    <!-- Add Hydrant Form -->
+                    <div class="mt-4 border-t border-outline-variant pt-4">
+                        <form id="add-hydrant-form" class="flex flex-wrap items-center gap-2">
+                            <input type="text" id="new-hydrant-name" placeholder="Nombre" required class="w-[80px] flex-1 px-2 py-1.5 text-label-xs bg-surface border border-outline-variant rounded-md focus:border-primary outline-none text-on-surface">
+                            <input type="number" id="new-hydrant-cap" placeholder="Cap." required min="1" value="1" class="w-12 px-2 py-1.5 text-label-xs bg-surface border border-outline-variant rounded-md focus:border-primary outline-none text-on-surface">
+                            <select id="new-hydrant-estado" class="w-[70px] px-1 py-1.5 text-label-xs bg-surface border border-outline-variant rounded-md focus:border-primary outline-none text-on-surface">
+                                <option value="disponible">Disp.</option>
+                                <option value="mantenimiento">Mant.</option>
+                            </select>
+                            <button type="submit" class="px-3 py-1.5 bg-primary text-on-primary text-label-xs font-bold rounded-md hover:bg-primary-container transition-colors">+</button>
+                        </form>
+                        <div id="add-hydrant-feedback" class="mt-1 text-[10px] hidden"></div>
+                    </div>
+                </div>
+            </aside>
         </div>
     </div>
 
-    <!-- ========================================== -->
-    <!-- PÁGINA: TURNOS - CARGA CON AJAX ROBUSTO -->
-    <!-- ========================================== -->
-    <div id="page-turnos" class="page-content" style="display:none;">
-        <!-- Botón de recarga -->
-        <div style="display:flex;justify-content:flex-end;margin-bottom:12px;">
-            <button onclick="recargarTurnos()" style="padding:6px 16px;background:transparent;border:1px solid #e8eaed;border-radius:8px;cursor:pointer;font-size:12px;color:#666;display:flex;align-items:center;gap:6px;transition:all 0.2s ease;">
-                <span>🔄</span> Recargar mapa
-            </button>
-        </div>
-        
-        <!-- El contenedor se creará dinámicamente si no existe -->
-        <div id="turnosContainer" style="min-height:400px;">
-            <!-- Estado de carga inicial -->
-            <div id="turnosLoading" style="text-align:center;padding:60px 20px;color:#888;background:white;border-radius:12px;border:1px solid #e8eaed;">
-                <div style="width:40px;height:40px;border:3px solid #e8eaed;border-top-color:#2e7d32;border-radius:50%;animation:spin 1s linear infinite;margin:0 auto 16px;"></div>
-                <p style="font-size:16px;font-weight:600;color:#1a1a1a;">Cargando mapa de turnos...</p>
-                <p style="font-size:13px;color:#888;margin-top:4px;">Conectando con el sistema de riego</p>
-                <p style="font-size:11px;color:#aaa;margin-top:8px;">⏳ Por favor espera un momento</p>
+    <!-- BOTTOM PANEL: SYSTEM EVENTS (TERMINAL) -->
+    <footer class="fixed bottom-0 left-[260px] right-0 bg-[#121417] text-[#e0e3e5] h-[200px] border-t border-outline-variant shadow-2xl z-30 transform transition-transform duration-300" id="terminal-drawer">
+        <div class="h-10 px-4 bg-[#1e2124] flex items-center justify-between">
+            <div class="flex items-center gap-2">
+                <span class="material-symbols-outlined text-secondary-container text-[18px]">terminal</span>
+                <span class="text-label-xs font-label-xs uppercase tracking-widest text-surface-container-high">Eventos del Sistema</span>
             </div>
-            <!-- El contenido se cargará aquí -->
-            <div id="turnosContent" style="display:none;"></div>
-        </div>
-    </div>
-
-    <!-- ========================================== -->
-    <!-- PÁGINA: CONSOLA -->
-    <!-- ========================================== -->
-    <div id="page-consola" class="page-content" style="display:none;">
-        <div class="panel">
-            <div class="panel-header">
-                <div class="title">
-                    <span class="material-symbols-outlined">terminal</span>
-                    <h2>📡 Consola de Eventos</h2>
-                </div>
-                <div class="console-controls">
-                    <span class="counter" id="eventCounter2">0 eventos</span>
-                    <button class="btn-sm" onclick="limpiarConsola()">Limpiar</button>
-                    <button class="btn-sm" id="pauseBtn2" onclick="togglePausa()">⏸️ Pausar</button>
-                    <select class="btn-sm" id="filterSelect" onchange="filtrarConsola(this.value)">
-                        <option value="all">📋 Todos</option>
-                        <option value="productor">🌱 Productor</option>
-                        <option value="consumidor">⏳ Consumidor</option>
-                        <option value="monitor">🚦 Monitor</option>
-                        <option value="sensor">📊 Sensor</option>
-                        <option value="hidrante">🚿 Hidrante</option>
-                        <option value="riego">💧 Riego</option>
-                        <option value="alerta">🔔 Alerta</option>
-                        <option value="critico">🚨 Crítico</option>
-                    </select>
-                </div>
-            </div>
-            <div class="console-output" id="consoleOutput2">
-                <!-- Renderizado por JS -->
+            <div class="flex items-center gap-3">
+                <span class="text-[10px] font-code-sm text-surface-variant px-2 py-0.5 bg-surface-variant/10 rounded">LIVE FEED</span>
+                <button class="material-symbols-outlined text-surface-variant hover:text-white transition-colors" id="toggle-terminal">keyboard_arrow_down</button>
             </div>
         </div>
-    </div>
-
+        <div id="terminal-log" class="p-4 font-code-sm text-code-sm h-[160px] overflow-y-auto custom-scrollbar terminal-glow">
+            <!-- Dynamic Content -->
+            <div class="mt-2 text-surface-variant flex items-center gap-2" id="terminal-cursor">
+                <span class="animate-pulse">_</span>
+                <span class="italic text-[11px] opacity-40">Escuchando nuevas señales...</span>
+            </div>
+        </div>
+    </footer>
 </main>
 
-<!-- ========================================== -->
-<!-- JAVASCRIPT - SOLO UNA VEZ CADA UNO -->
-<!-- ========================================== -->
-
-<script src="js/config.js"></script>
-<script src="js/data.js"></script>
-<script src="js/components.js"></script>
-<script src="js/dashboard.js"></script>
-
-<script>
-// ============================================
-// NAVEGACIÓN ENTRE PESTAÑAS
-// ============================================
-document.addEventListener('DOMContentLoaded', function() {
-    console.log('🔍 Inicializando navegación...');
-    
-    const tabs = document.querySelectorAll('.tab-btn');
-    const pages = {
-        dashboard: document.getElementById('page-dashboard'),
-        hidrantes: document.getElementById('page-hidrantes'),
-        turnos: document.getElementById('page-turnos'),
-        consola: document.getElementById('page-consola')
-    };
-    
-    tabs.forEach(function(tab) {
-        tab.addEventListener('click', function() {
-            var pageName = this.dataset.tab;
-            console.log('📱 Cambiando a pestaña: ' + pageName);
-            
-            tabs.forEach(function(t) { t.classList.remove('active'); });
-            this.classList.add('active');
-            
-            Object.values(pages).forEach(function(p) {
-                if (p) p.style.display = 'none';
-            });
-            
-            if (pages[pageName]) {
-                pages[pageName].style.display = 'block';
-                console.log('✅ Página "' + pageName + '" mostrada');
-            }
-            
-            if (pageName === 'hidrantes' && typeof renderHidrantes === 'function') {
-                setTimeout(function() {
-                    console.log('🔄 Renderizando hidrantes...');
-                    renderHidrantes();
-                }, 150);
-            }
-            
-            // Cargar turnos con AJAX cuando se seleccione la pestaña
-            if (pageName === 'turnos') {
-                setTimeout(function() {
-                    console.log('🔄 Cargando turnos con AJAX...');
-                    cargarTurnos();
-                }, 300);
-            }
-        });
-    });
-    
-    if (pages.dashboard) {
-        pages.dashboard.style.display = 'block';
-        console.log('✅ Dashboard visible por defecto');
-    }
-    
-    console.log('✅ Navegación por pestañas inicializada');
-});
-
-// ============================================
-// FUNCIÓN PARA FILTRAR CONSOLA
-// ============================================
-function filtrarConsola(filter) {
-    console.log('🔍 Filtrando consola por: ' + filter);
-    var items = document.querySelectorAll('#consoleOutput2 .log, #consoleOutput .log');
-    items.forEach(function(item) {
-        var msg = item.querySelector('.msg')?.textContent || '';
-        if (filter === 'all') {
-            item.style.display = 'flex';
-        } else {
-            var match = msg.toLowerCase().includes(filter.toLowerCase());
-            item.style.display = match ? 'flex' : 'none';
-        }
-    });
-}
-
-window.filtrarConsola = filtrarConsola;
-
-// ============================================
-// CARGAR MAPA DE TURNOS CON AJAX (VERSIÓN ROBUSTA)
-// ============================================
-let turnosCargado = false;
-
-function asegurarElementosTurnos() {
-    console.log('🔍 Verificando elementos de turnos...');
-    
-    // Verificar si existe el contenedor principal
-    let container = document.getElementById('turnosContainer');
-    if (!container) {
-        console.log('⚠️ turnosContainer no encontrado, creando...');
-        const pageTurnos = document.getElementById('page-turnos');
-        if (!pageTurnos) {
-            console.error('❌ Página de turnos no encontrada');
-            return null;
-        }
-        container = document.createElement('div');
-        container.id = 'turnosContainer';
-        container.style.minHeight = '400px';
-        pageTurnos.appendChild(container);
-        console.log('✅ Contenedor turnosContainer creado');
-    }
-    
-    // Verificar si existe el loading
-    let loading = document.getElementById('turnosLoading');
-    if (!loading) {
-        console.log('⚠️ turnosLoading no encontrado, creando...');
-        loading = document.createElement('div');
-        loading.id = 'turnosLoading';
-        loading.style.textAlign = 'center';
-        loading.style.padding = '60px 20px';
-        loading.style.color = '#888';
-        loading.style.background = 'white';
-        loading.style.borderRadius = '12px';
-        loading.style.border = '1px solid #e8eaed';
-        loading.innerHTML = `
-            <div style="width:40px;height:40px;border:3px solid #e8eaed;border-top-color:#2e7d32;border-radius:50%;animation:spin 1s linear infinite;margin:0 auto 16px;"></div>
-            <p style="font-size:16px;font-weight:600;color:#1a1a1a;">Cargando mapa de turnos...</p>
-            <p style="font-size:13px;color:#888;margin-top:4px;">Conectando con el sistema de riego</p>
-        `;
-        container.appendChild(loading);
-        console.log('✅ Elemento turnosLoading creado');
-    }
-    
-    // Verificar si existe el content
-    let content = document.getElementById('turnosContent');
-    if (!content) {
-        console.log('⚠️ turnosContent no encontrado, creando...');
-        content = document.createElement('div');
-        content.id = 'turnosContent';
-        content.style.display = 'none';
-        container.appendChild(content);
-        console.log('✅ Elemento turnosContent creado');
-    }
-    
-    return { loading, content };
-}
-
-function cargarTurnos() {
-    console.log('🔄 Cargando mapa de turnos con AJAX...');
-    
-    // Asegurar que los elementos existen
-    const elementos = asegurarElementosTurnos();
-    if (!elementos) {
-        console.error('❌ No se pudieron crear los elementos necesarios');
-        return;
-    }
-    
-    const { loading, content } = elementos;
-    
-    // Si ya está cargado, no recargar
-    if (turnosCargado) {
-        console.log('ℹ️ Turnos ya cargados');
-        return;
-    }
-    
-    // Mostrar loading, ocultar contenido
-    loading.style.display = 'block';
-    content.style.display = 'none';
-    content.innerHTML = '';
-    
-    // Usar fetch (AJAX moderno) - probar ambas rutas
-    const urls = [
-        'app/Views/turnos_mapa.php',
-        '../app/Views/turnos_mapa.php'
-    ];
-    
-    let urlIndex = 0;
-    
-    function intentarFetch() {
-        if (urlIndex >= urls.length) {
-            throw new Error('No se pudo cargar el mapa con ninguna ruta');
-        }
-        
-        const url = urls[urlIndex];
-        console.log(`📡 Intentando fetch (${urlIndex + 1}/${urls.length}):`, url);
-        
-        return fetch(url)
-            .then(response => {
-                if (!response.ok) {
-                    throw new Error(`HTTP ${response.status}`);
-                }
-                return response.text();
-            })
-            .catch(error => {
-                console.warn(`⚠️ Falló con ${url}:`, error.message);
-                urlIndex++;
-                return intentarFetch();
-            });
-    }
-    
-    intentarFetch()
-        .then(html => {
-            // Ocultar loading, mostrar contenido
-            loading.style.display = 'none';
-            content.style.display = 'block';
-            content.innerHTML = html;
-            turnosCargado = true;
-            
-            console.log('✅ Mapa de turnos cargado correctamente');
-            
-            // Actualizar contadores después de cargar
-            setTimeout(() => {
-                try {
-                    const regando = content.querySelector('#count-regando');
-                    const espera = content.querySelector('#count-espera');
-                    const libre = content.querySelector('#count-libre');
-                    const critico = content.querySelector('#count-critico');
-                    
-                    if (regando) console.log(`📊 Regando: ${regando.textContent}`);
-                    if (espera) console.log(`📊 En espera: ${espera.textContent}`);
-                    if (libre) console.log(`📊 Libres: ${libre.textContent}`);
-                    if (critico) console.log(`📊 Crítico: ${critico.textContent}`);
-                } catch(e) {
-                    console.log('⚠️ No se pudieron actualizar contadores:', e);
-                }
-            }, 500);
-            
-            // Ejecutar scripts del contenido cargado
-            const scripts = content.querySelectorAll('script');
-            scripts.forEach(function(oldScript) {
-                const newScript = document.createElement('script');
-                Array.from(oldScript.attributes).forEach(function(attr) {
-                    newScript.setAttribute(attr.name, attr.value);
-                });
-                newScript.textContent = oldScript.textContent;
-                oldScript.parentNode.replaceChild(newScript, oldScript);
-            });
-        })
-        .catch(error => {
-            console.error('❌ Error al cargar turnos:', error);
-            loading.style.display = 'block';
-            loading.innerHTML = `
-                <div style="text-align:center;padding:40px 20px;color:#888;background:white;border-radius:12px;border:1px solid #e8eaed;">
-                    <div style="font-size:48px;margin-bottom:16px;">❌</div>
-                    <div style="color:#c62828;font-size:18px;font-weight:600;">Error al cargar el mapa</div>
-                    <p style="color:#888;font-size:14px;margin-top:8px;">${error.message}</p>
-                    <p style="color:#888;font-size:12px;margin-top:4px;">Verifica que el servidor PHP esté corriendo</p>
-                    <button onclick="recargarTurnos()" style="margin-top:16px;padding:8px 24px;background:#2e7d32;color:white;border:none;border-radius:8px;cursor:pointer;font-weight:600;transition:all 0.2s ease;">
-                        🔄 Reintentar
-                    </button>
-                    <div style="margin-top:12px;font-size:11px;color:#aaa;">
-                        Rutas intentadas: ${urls.join(', ')}
-                    </div>
-                </div>
-            `;
-        });
-}
-
-function recargarTurnos() {
-    console.log('🔄 Recargando turnos...');
-    turnosCargado = false;
-    
-    const loading = document.getElementById('turnosLoading');
-    const content = document.getElementById('turnosContent');
-    
-    if (loading) {
-        loading.style.display = 'block';
-        loading.innerHTML = `
-            <div style="text-align:center;padding:60px 20px;color:#888;background:white;border-radius:12px;border:1px solid #e8eaed;">
-                <div style="width:40px;height:40px;border:3px solid #e8eaed;border-top-color:#2e7d32;border-radius:50%;animation:spin 1s linear infinite;margin:0 auto 16px;"></div>
-                <p style="font-size:16px;font-weight:600;color:#1a1a1a;">Recargando mapa de turnos...</p>
+<!-- Modal Agregar Parcela -->
+<div id="modal-agregar-parcela" class="fixed inset-0 bg-black/50 z-50 hidden flex items-center justify-center backdrop-blur-sm">
+    <div class="bg-surface p-6 rounded-xl shadow-2xl w-[400px]">
+        <h3 class="text-title-sm font-bold text-primary mb-4">Agregar Parcela</h3>
+        <form id="form-agregar-parcela" class="space-y-4">
+            <div>
+                <label class="block text-label-xs text-on-surface-variant mb-1">Nombre de la Parcela</label>
+                <input type="text" id="add-parcela-nombre" required class="w-full px-3 py-2 text-body-sm bg-surface-container-lowest border border-outline-variant rounded-md outline-none focus:border-primary">
             </div>
-        `;
-    }
-    
-    if (content) {
-        content.style.display = 'none';
-        content.innerHTML = '';
-    }
-    
-    setTimeout(cargarTurnos, 500);
-}
+            <div>
+                <label class="block text-label-xs text-on-surface-variant mb-1">Cultivo</label>
+                <input type="text" id="add-parcela-cultivo" required class="w-full px-3 py-2 text-body-sm bg-surface-container-lowest border border-outline-variant rounded-md outline-none focus:border-primary">
+            </div>
+            <div class="grid grid-cols-2 gap-4">
+                <div>
+                    <label class="block text-label-xs text-on-surface-variant mb-1">Humedad Inicial (%)</label>
+                    <input type="number" id="add-parcela-humedad" step="0.1" max="100" min="0" required class="w-full px-3 py-2 text-body-sm bg-surface-container-lowest border border-outline-variant rounded-md outline-none focus:border-primary">
+                </div>
+                <div>
+                    <label class="block text-label-xs text-on-surface-variant mb-1">Temp. Inicial (°C)</label>
+                    <input type="number" id="add-parcela-temp" step="0.1" required class="w-full px-3 py-2 text-body-sm bg-surface-container-lowest border border-outline-variant rounded-md outline-none focus:border-primary">
+                </div>
+            </div>
+            <div class="flex justify-end gap-2 mt-6">
+                <button type="button" class="px-4 py-2 text-body-sm text-on-surface-variant border border-outline-variant rounded-md hover:bg-surface-container-low" onclick="document.getElementById('modal-agregar-parcela').classList.add('hidden')">Cancelar</button>
+                <button type="submit" class="px-4 py-2 text-body-sm bg-primary text-white rounded-md hover:bg-primary-container">Guardar</button>
+            </div>
+        </form>
+    </div>
+</div>
 
-// Exponer funciones globalmente
-window.cargarTurnos = cargarTurnos;
-window.recargarTurnos = recargarTurnos;
+<!-- Modal Editar Parcela (Forzar Estrés) -->
+<div id="modal-editar-parcela" class="fixed inset-0 bg-black/50 z-50 hidden flex items-center justify-center backdrop-blur-sm">
+    <div class="bg-surface p-6 rounded-xl shadow-2xl w-[400px]">
+        <h3 class="text-title-sm font-bold text-primary mb-1" id="edit-parcela-title">Editar Parcela</h3>
+        <p class="text-label-xs text-on-surface-variant mb-4">Forzar valores para probar algoritmo</p>
+        <form id="form-editar-parcela" class="space-y-4">
+            <input type="hidden" id="edit-parcela-id">
+            <div>
+                <label class="block text-label-xs text-on-surface-variant mb-1">Humedad Forzada (%)</label>
+                <div class="flex items-center gap-3">
+                    <input type="range" id="edit-parcela-humedad-slider" min="0" max="100" step="1" class="flex-1" oninput="document.getElementById('edit-parcela-humedad-val').textContent = this.value + '%'">
+                    <span id="edit-parcela-humedad-val" class="text-body-sm font-bold w-12 text-right">--</span>
+                </div>
+            </div>
+            <div>
+                <label class="block text-label-xs text-on-surface-variant mb-1">Temperatura Forzada (°C)</label>
+                <div class="flex items-center gap-3">
+                    <input type="range" id="edit-parcela-temp-slider" min="0" max="60" step="1" class="flex-1" oninput="document.getElementById('edit-parcela-temp-val').textContent = this.value + '°C'">
+                    <span id="edit-parcela-temp-val" class="text-body-sm font-bold w-12 text-right">--</span>
+                </div>
+            </div>
+            <div class="flex justify-end gap-2 mt-6">
+                <button type="button" class="px-4 py-2 text-body-sm text-on-surface-variant border border-outline-variant rounded-md hover:bg-surface-container-low" onclick="document.getElementById('modal-editar-parcela').classList.add('hidden')">Cancelar</button>
+                <button type="submit" class="px-4 py-2 text-body-sm bg-error text-white rounded-md hover:bg-error-container/80 transition-colors">Aplicar Estrés</button>
+            </div>
+        </form>
+    </div>
+</div>
 
-console.log('📦 Sistema de carga de turnos con AJAX inicializado');
-
-// ============================================
-// 🔥 FORZAR OCULTAR LOADING - GARANTIZADO
-// ============================================
-(function() {
-    function forceHideLoading() {
-        var loading = document.getElementById('loadingOverlay');
-        if (!loading) return;
-        loading.style.transition = 'opacity 0.4s ease';
-        loading.style.opacity = '0';
-        loading.style.pointerEvents = 'none';
-        setTimeout(function() {
-            loading.style.display = 'none';
-            loading.style.visibility = 'hidden';
-        }, 450);
-        console.log('🔥 Loading forzado a ocultar');
-    }
-    
-    // Intentar ocultar inmediatamente al cargar el script
-    // y con múltiples fallbacks
-    if (document.readyState === 'loading') {
-        document.addEventListener('DOMContentLoaded', function() {
-            // El init() de dashboard.js lo ocultará, pero ponemos un backup
-            setTimeout(forceHideLoading, 4000); // máximo 4s de espera
-        });
-    } else {
-        setTimeout(forceHideLoading, 4000);
-    }
-    
-    // Backup extremo: si después de 6 segundos sigue visible, forzar
-    setTimeout(forceHideLoading, 6000);
-})();
-
-// ============================================
-// 🐍 MONITOR DE SIMULACIÓN PYTHON
-// ============================================
-(function() {
-    // Consulta el API PHP cada 5s para ver si hay turnos nuevos del script Python
-    var lastTurnoId = 0;
-    var pyBadge = document.getElementById('pyStatus');
-    
-    function checkPythonSimulation() {
-        var apiUrl = (window.CONFIG && window.CONFIG.api && window.CONFIG.api.baseUrl)
-            ? window.CONFIG.api.baseUrl
-            : 'http://localhost:8000/backend/api';
-        
-        fetch(apiUrl + '/riego.php?limit=1&order=desc')
-            .then(function(r) { return r.ok ? r.json() : null; })
-            .then(function(data) {
-                if (!data) return;
-                var turnos = data.turnos || data.data || [];
-                if (turnos.length === 0) return;
-                
-                var ultimo = turnos[0];
-                var turnoId = parseInt(ultimo.id) || 0;
-                
-                if (pyBadge) {
-                    pyBadge.style.display = 'inline-flex';
-                    
-                    if (ultimo.estado === 'regando') {
-                        pyBadge.style.background = 'rgba(63,185,80,0.15)';
-                        pyBadge.style.color = '#3fb950';
-                        pyBadge.style.borderColor = 'rgba(63,185,80,0.4)';
-                        pyBadge.textContent = '🐍 Python: Regando turno #' + turnoId;
-                    } else {
-                        pyBadge.style.background = 'rgba(88,166,255,0.1)';
-                        pyBadge.style.color = '#58a6ff';
-                        pyBadge.style.borderColor = 'rgba(88,166,255,0.3)';
-                        pyBadge.textContent = '🐍 Python: ' + (turnos.length) + ' turnos en DB';
-                    }
-                    
-                    // Notificar en consola solo si hay nuevo turno
-                    if (turnoId > lastTurnoId && lastTurnoId > 0) {
-                        if (typeof agregarEvento === 'function') {
-                            agregarEvento('🐍 [Python] Nuevo turno #' + turnoId + ' - ' + (ultimo.estado || 'completado'), 'riego');
-                        }
-                    }
-                    lastTurnoId = turnoId;
-                }
-            })
-            .catch(function() {
-                // El Python puede estar corriendo sin servidor PHP activo
-                if (pyBadge) pyBadge.style.display = 'none';
-            });
-    }
-    
-    // Esperar a que el DOM esté listo antes de empezar a polling
-    document.addEventListener('DOMContentLoaded', function() {
-        setTimeout(checkPythonSimulation, 2000);
-        setInterval(checkPythonSimulation, 5000);
-    });
-})();
-</script>
-
+<script src="js/main.js"></script>
 </body>
 </html>
